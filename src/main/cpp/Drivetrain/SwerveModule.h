@@ -31,8 +31,8 @@ private:
     std::unique_ptr<CowLib::CowMotorController> m_DriveMotor;
     std::unique_ptr<CowLib::CowMotorController> m_RotationMotor;
 
-    CowLib::CowMotorController::PercentOutput m_DriveControlRequest;
-    CowLib::CowMotorController::PositionPercentOutput m_RotationControlRequest;
+    CowLib::CowMotorUtils::PercentOutput m_DriveControlRequest;
+    CowLib::CowMotorUtils::PositionPercentOutput m_RotationControlRequest;
 
     std::unique_ptr<CowLib::CowCANCoder> m_Encoder;
 

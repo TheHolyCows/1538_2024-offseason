@@ -144,10 +144,10 @@ void SwerveModule::SetBrakeMode(bool brakeMode)
 
     if (m_BrakeMode)
     {
-        m_DriveMotor->SetNeutralMode(CowLib::CowMotorController::BRAKE);
+        m_DriveMotor->SetNeutralMode(CowLib::CowMotorUtils::BRAKE);
     }
     else
     {
-        m_DriveMotor->SetNeutralMode(CowLib::CowMotorController::COAST);
+        m_DriveMotor->SetNeutralMode(CowLib::CowMotorUtils::COAST);
     }
 }

@@ -10,7 +10,7 @@ namespace CowLib
      * @brief Construct a new Cow Motor Controller
      * @param id The CAN ID of the motor controller
      */
-    CowMotorController::CowMotorController(int id, std::string bus, CowMotorUtils::MotorType motorType)
+    CowMotorController::CowMotorController(int id, std::string bus)
     {
         m_Talon             = new ctre::phoenixpro::hardware::TalonFX(id, std::move(bus));
         m_Setpoint          = 0;
@@ -31,14 +31,14 @@ namespace CowLib
      * @brief Set the motor controller with a control request struct
      * @param request The control request struct
      */
-    void CowMotorController::Set(std::variant<CowMotorUtils::PercentOutput,
-                                              CowMotorUtils::VoltageOutput,
-                                              CowMotorUtils::PositionPercentOutput,
-                                              CowMotorUtils::PositionVoltage,
-                                              CowMotorUtils::VelocityPercentOutput,
-                                              CowMotorUtils::VelocityVoltage,
-                                              CowMotorUtils::MotionMagicPercentOutput,
-                                              CowMotorUtils::MotionMagicVoltage> request)
+    void CowMotorController::Set(std::variant<PercentOutput,
+                                              VoltageOutput,
+                                              PositionPercentOutput,
+                                              PositionVoltage,
+                                              VelocityPercentOutput,
+                                              VelocityVoltage,
+                                              MotionMagicPercentOutput,
+                                              MotionMagicVoltage> request)
     {
         auto &talon            = m_Talon;
         double *setpoint       = &m_Setpoint;
@@ -57,7 +57,7 @@ namespace CowLib
 
     // Overload for TorqueControl requests because they always use FOC
     void CowMotorController::Set(
-        std::variant<CowMotorUtils::TorqueCurrentOutput, CowMotorUtils::PositionTorqueCurrent, CowMotorUtils::VelocityTorqueCurrent, CowMotorUtils::MotionMagicTorqueCurrent>
+        std::variant<TorqueCurrentOutput, PositionTorqueCurrent, VelocityTorqueCurrent, MotionMagicTorqueCurrent>
             request)
     {
         auto &talon      = m_Talon;
@@ -72,7 +72,7 @@ namespace CowLib
     }
 
     // Overload for follwer request because it's special
-    void CowMotorController::Set(CowMotorUtils::Follower request)
+    void CowMotorController::Set(Follower request)
     {
         m_Talon->SetControl(request.ToControlRequest());
         m_Setpoint = request.LeaderID;
@@ -165,17 +165,17 @@ namespace CowLib
         return m_Talon->SetRotorPosition(units::turn_t{ turns });
     }
 
-    void CowMotorController::SetNeutralMode(CowMotorUtils::NeutralMode mode)
+    void CowMotorController::SetNeutralMode(NeutralMode mode)
     {
         auto config = ctre::phoenixpro::configs::MotorOutputConfigs{};
         m_Talon->GetConfigurator().Refresh(config);
 
         switch (mode)
         {
-        case CowMotorUtils::COAST :
+        case COAST :
             config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Coast;
             break;
-        case CowMotorUtils::BRAKE :
+        case BRAKE :
             config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Brake;
             break;
         default :
@@ -188,7 +188,7 @@ namespace CowLib
         // ApplyConfig(config);
     }
 
-    CowMotorUtils::NeutralMode CowMotorController::GetNeutralMode()
+    CowMotorController::NeutralMode CowMotorController::GetNeutralMode()
     {
         auto config = ctre::phoenixpro::configs::MotorOutputConfigs{};
         m_Talon->GetConfigurator().Refresh(config);
@@ -196,11 +196,11 @@ namespace CowLib
         switch (config.NeutralMode.value)
         {
         case ctre::phoenixpro::signals::NeutralModeValue::Coast :
-            return CowMotorUtils::COAST;
+            return COAST;
         case ctre::phoenixpro::signals::NeutralModeValue::Brake :
-            return CowMotorUtils::BRAKE;
+            return BRAKE;
         default :
-            return CowMotorUtils::COAST;
+            return COAST;
         }
     }
 

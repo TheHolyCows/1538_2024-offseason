@@ -56,7 +56,7 @@
 //         return position;
 //     }
 
-//     void CowWestcoast::setNeutralMode(CowLib::CowMotorUtils::CowNeutralMode mode)
+//     void CowWestcoast::setNeutralMode(CowLib::CowMotorController::CowNeutralMode mode)
 //     {
 //         m_LeftDriveA->SetNeutralMode(mode);
 //         m_LeftDriveB->SetNeutralMode(mode);

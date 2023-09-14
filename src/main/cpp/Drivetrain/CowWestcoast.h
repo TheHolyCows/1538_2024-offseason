@@ -26,7 +26,7 @@
 
 //         double getDriveDistance(void);
 
-//         void setNeutralMode(CowLib::CowMotorUtils::CowNeutralMode);
+//         void setNeutralMode(CowLib::CowMotorController::CowNeutralMode);
 //         void setStatorLimits(double limit, double threshold, double duration);
 //         void setMotors(double left, double right);
 

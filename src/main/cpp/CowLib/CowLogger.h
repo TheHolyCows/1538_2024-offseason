@@ -10,7 +10,6 @@
 
 #include "../CowConstants.h"
 #include "../CowPigeon.h"
-#include "CowMotorUtilities.h"
 #include "CowMotorController.h"
 
 #include <algorithm>

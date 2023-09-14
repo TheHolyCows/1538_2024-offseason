@@ -22,8 +22,8 @@ private:
     CowLib::CowMotorController *m_WristMotor;
     CowLib::CowMotorController *m_IntakeMotor;
 
-    CowLib::CowMotorUtils::MotionMagicPercentOutput m_WristControlRequest{ 0 };
-    CowLib::CowMotorUtils::PercentOutput m_IntakeControlRequest{ 0 };
+    CowLib::CowMotorController::MotionMagicPercentOutput m_WristControlRequest{ 0 };
+    CowLib::CowMotorController::PercentOutput m_IntakeControlRequest{ 0 };
     frc::Solenoid *m_Solenoid;
 
     double m_WristPosition;

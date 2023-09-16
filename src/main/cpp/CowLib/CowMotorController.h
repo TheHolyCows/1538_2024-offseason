@@ -5,6 +5,11 @@
 #ifndef __COWLIB_COWMOTORCONTROLLER_H__
 #define __COWLIB_COWMOTORCONTROLLER_H__
 
+#include "CowMotor/CowMotorUtils.h"
+#include "CowMotor/GenericCowMotor.h"
+#include "CowMotor/PhoenixProTalonFX.h"
+#include "CowMotor/PhoenixV5TalonFX.h"
+
 #include <ctre/phoenixpro/TalonFX.hpp>
 #include <variant>
 
@@ -17,6 +22,9 @@ namespace CowLib
         double m_Setpoint;
         bool m_UseFOC;
         bool m_OverrideBrakeMode;
+
+        CowMotor::GenericCowMotor *m_GenericMotor;
+        void InitializeInternalMotor(int id, CowMotor::MotorType, std::string bus);
 
     public:
         struct PercentOutput
@@ -223,20 +231,21 @@ namespace CowLib
 
         ~CowMotorController();
 
-        void Set(std::variant<PercentOutput,
-                              VoltageOutput,
-                              PositionPercentOutput,
-                              PositionVoltage,
-                              VelocityPercentOutput,
-                              VelocityVoltage,
-                              MotionMagicPercentOutput,
-                              MotionMagicVoltage> request);
+        void Set(std::variant<CowMotor::PercentOutput,
+                              CowMotor::VoltageOutput,
+                              CowMotor::PositionPercentOutput,
+                              CowMotor::PositionVoltage,
+                              CowMotor::VelocityPercentOutput,
+                              CowMotor::VelocityVoltage,
+                              CowMotor::MotionMagicPercentOutput,
+                              CowMotor::MotionMagicVoltage> request);
 
-        void
-        Set(std::variant<TorqueCurrentOutput, PositionTorqueCurrent, VelocityTorqueCurrent, MotionMagicTorqueCurrent>
-                request);
+        void Set(std::variant<CowMotor::TorqueCurrentOutput, 
+                              CowMotor::PositionTorqueCurrent, 
+                              CowMotor::VelocityTorqueCurrent, 
+                              CowMotor::MotionMagicTorqueCurrent> request);
 
-        void Set(Follower request);
+        void Set(CowMotor::Follower request);
 
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);

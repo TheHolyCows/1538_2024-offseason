@@ -10,13 +10,18 @@ namespace CowLib
      * @brief Construct a new Cow Motor Controller
      * @param id The CAN ID of the motor controller
      */
-    CowMotorController::CowMotorController(int id, std::string bus)
-    {
+    CowMotorController::CowMotorController(int id, std::string bus) // update when done - (int id, CowMotor::MotorType motorType, std::string bus)
+    {   
+        // currently redundant
         m_Talon             = new ctre::phoenixpro::hardware::TalonFX(id, std::move(bus));
         m_Setpoint          = 0;
         m_UseFOC            = true;
         m_OverrideBrakeMode = false;
 
+
+        InitializeInternalMotor(id, CowMotor::PHOENIX_PRO, bus);
+
+        // need to remove
         ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
 
         CowLogger::GetInstance()->RegisterMotor(id, this);
@@ -24,58 +29,50 @@ namespace CowLib
 
     CowMotorController::~CowMotorController()
     {
-        delete m_Talon;
+        // delete m_Talon;
+        delete m_GenericMotor;
+    }
+
+    void CowMotorController::InitializeInternalMotor(int id, CowMotor::MotorType motorType, std::string bus)
+    {
+        switch (motorType)
+        {
+            case CowMotor::PHOENIX_PRO:
+                m_GenericMotor = new CowMotor::PhoenixProTalonFX(id,bus);
+            case CowMotor::PHOENIX_V5:
+                m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
+        }
     }
 
     /**
      * @brief Set the motor controller with a control request struct
      * @param request The control request struct
      */
-    void CowMotorController::Set(std::variant<PercentOutput,
-                                              VoltageOutput,
-                                              PositionPercentOutput,
-                                              PositionVoltage,
-                                              VelocityPercentOutput,
-                                              VelocityVoltage,
-                                              MotionMagicPercentOutput,
-                                              MotionMagicVoltage> request)
+    void CowMotorController::Set(std::variant<CowMotor::PercentOutput,
+                                              CowMotor::VoltageOutput,
+                                              CowMotor::PositionPercentOutput,
+                                              CowMotor::PositionVoltage,
+                                              CowMotor::VelocityPercentOutput,
+                                              CowMotor::VelocityVoltage,
+                                              CowMotor::MotionMagicPercentOutput,
+                                              CowMotor::MotionMagicVoltage> request)
     {
-        auto &talon            = m_Talon;
-        double *setpoint       = &m_Setpoint;
-        bool useFOC            = m_UseFOC;
-        bool overrideBrakeMode = m_OverrideBrakeMode;
-
-        visit(
-            [talon, setpoint, useFOC, overrideBrakeMode](auto &&req)
-            {
-                talon->SetControl(
-                    req.ToControlRequest().WithEnableFOC(useFOC).WithOverrideBrakeDurNeutral(overrideBrakeMode));
-                *setpoint = req.GetSetpoint();
-            },
-            request);
+        m_GenericMotor->Set(request);
     }
 
     // Overload for TorqueControl requests because they always use FOC
-    void CowMotorController::Set(
-        std::variant<TorqueCurrentOutput, PositionTorqueCurrent, VelocityTorqueCurrent, MotionMagicTorqueCurrent>
-            request)
+    void CowMotorController::Set(std::variant<CowMotor::TorqueCurrentOutput,
+                                              CowMotor::PositionTorqueCurrent,
+                                              CowMotor::VelocityTorqueCurrent,
+                                              CowMotor::MotionMagicTorqueCurrent> request)
     {
-        auto &talon      = m_Talon;
-        double *setpoint = &m_Setpoint;
-        visit(
-            [talon, setpoint](auto &&req)
-            {
-                talon->SetControl(req.ToControlRequest());
-                *setpoint = req.GetSetpoint();
-            },
-            request);
+        m_GenericMotor->Set(request);
     }
 
     // Overload for follwer request because it's special
-    void CowMotorController::Set(Follower request)
+    void CowMotorController::Set(CowMotor::Follower request)
     {
-        m_Talon->SetControl(request.ToControlRequest());
-        m_Setpoint = request.LeaderID;
+        m_GenericMotor->Set(request);
     }
 
     /** 
@@ -83,7 +80,8 @@ namespace CowLib
      */
     void CowMotorController::UseFOC(bool useFOC)
     {
-        m_UseFOC = useFOC;
+        // m_UseFOC = useFOC;
+        m_GenericMotor->UseFOC(useFOC);
     }
 
     /**
@@ -91,7 +89,8 @@ namespace CowLib
      */
     void CowMotorController::OverrideBrakeMode(bool overrideBrakeMode)
     {
-        m_OverrideBrakeMode = overrideBrakeMode;
+        // m_OverrideBrakeMode = overrideBrakeMode;
+        m_GenericMotor->OverrideBrakeMode(overrideBrakeMode);
     }
 
     /**

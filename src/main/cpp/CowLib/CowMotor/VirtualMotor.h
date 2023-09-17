@@ -1,6 +1,6 @@
 //==================================================
 // Copyright (C) 2023 Team 1538 / The Holy Cows
-// @author ssemtner, jon-bassi
+// @author ssemter, jon-bassi
 //==================================================
 
 #pragma once
@@ -8,16 +8,18 @@
 #include "GenericCowMotor.h"
 #include "CowMotorUtils.h"
 
-#include <ctre/phoenixpro/TalonFX.hpp>
 #include <variant>
 
 
 namespace CowMotor
-{
-    class PhoenixProTalonFX : public GenericCowMotor
+{   
+    /**
+     * @brief virtual motor implementation for simultation testing
+     */
+    class VirtualMotor : public GenericCowMotor
     {
     public:
-        PhoenixProTalonFX(int id, std::string bus);
+        VirtualMotor(int id, std::string bus);
 
         /* control requests */
         void Set(std::variant<PercentOutput,
@@ -60,7 +62,7 @@ namespace CowMotor
         void SetReversed(bool reversed);
 
     private:
-        ctre::phoenixpro::hardware::TalonFX *m_Talon;
+        void *m_Talon;
         
         double m_Setpoint;
         bool m_UseFOC;

@@ -9,7 +9,10 @@
 #include <variant>
 
 namespace CowMotor
-{
+{   
+    /**
+     * @brief template class for all motor controllers
+     */
     class GenericCowMotor
     {
         public:
@@ -54,6 +57,7 @@ namespace CowMotor
         virtual void SetPID(double p, double i, double d, double f = 0.0) = 0;
         virtual void SetMotionMagic(double velocity, double acceleration) = 0;
         virtual void SetInverted(bool inverted) = 0;
+        virtual void SetReversed(bool reversed) = 0;
 
         // ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
 

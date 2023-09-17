@@ -239,17 +239,14 @@ namespace CowLib
                               CowMotor::VelocityVoltage,
                               CowMotor::MotionMagicPercentOutput,
                               CowMotor::MotionMagicVoltage> request);
-
         void Set(std::variant<CowMotor::TorqueCurrentOutput, 
                               CowMotor::PositionTorqueCurrent, 
                               CowMotor::VelocityTorqueCurrent, 
                               CowMotor::MotionMagicTorqueCurrent> request);
-
         void Set(CowMotor::Follower request);
 
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);
-
         void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
                                       ctre::phoenixpro::configs::Slot0Configs,
                                       ctre::phoenixpro::configs::MotionMagicConfigs,
@@ -259,16 +256,14 @@ namespace CowLib
         double GetVelocity();
         double GetTorqueCurrent();
         double GetRefreshTorqueCurrent();
+        CowMotor::NeutralMode GetNeutralMode();
 
         int SetSensorPosition(double turns);
-
-        void SetNeutralMode(NeutralMode mode);
-        NeutralMode GetNeutralMode();
-
+        void SetNeutralMode(CowMotor::NeutralMode mode);
         void SetPID(double p, double i, double d, double f = 0.0);
         void SetMotionMagic(double velocity, double acceleration);
-
         void SetInverted(bool inverted);
+        void SetReversed(bool reversed);
 
         ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
 

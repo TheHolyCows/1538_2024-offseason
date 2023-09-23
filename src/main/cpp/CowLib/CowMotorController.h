@@ -227,7 +227,7 @@ namespace CowLib
             BRAKE
         };
 
-        CowMotorController(int id, std::string bus = "cowbus");
+        CowMotorController(int id, CowMotor::MotorType motorType, std::string bus = "cowbus");
 
         ~CowMotorController();
 

@@ -10,19 +10,9 @@ namespace CowLib
      * @brief Construct a new Cow Motor Controller
      * @param id The CAN ID of the motor controller
      */
-    CowMotorController::CowMotorController(int id, std::string bus) // update when done - (int id, CowMotor::MotorType motorType, std::string bus)
-    {   
-        // currently redundant
-        m_Talon             = new ctre::phoenixpro::hardware::TalonFX(id, std::move(bus));
-        m_Setpoint          = 0;
-        m_UseFOC            = true;
-        m_OverrideBrakeMode = false;
-
-
+    CowMotorController::CowMotorController(int id, CowMotor::MotorType motorType, std::string bus)
+    { 
         InitializeInternalMotor(id, CowMotor::PHOENIX_PRO, bus);
-
-        // need to remove
-        ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
 
         CowLogger::GetInstance()->RegisterMotor(id, this);
     }
@@ -39,8 +29,14 @@ namespace CowLib
         {
             case CowMotor::PHOENIX_PRO:
                 m_GenericMotor = new CowMotor::PhoenixProTalonFX(id,bus);
+                break;
             case CowMotor::PHOENIX_V5:
                 m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
+                break;
+            // case CowMotor::PHOENIX_V6:
+            //     m_GenericMotor = new CowMotor::PhoenixV6TalonFX(id,bus);
+            //     break;
+
         }
     }
 
@@ -170,52 +166,22 @@ namespace CowLib
      */
     int CowMotorController::SetSensorPosition(double turns)
     {
-        return m_Talon->SetRotorPosition(units::turn_t{ turns });
+        m_GenericMotor->SetSensorPosition(turns);
     }
 
     void CowMotorController::SetNeutralMode(CowMotor::NeutralMode mode)
     {
-        auto config = ctre::phoenixpro::configs::MotorOutputConfigs{};
-        m_Talon->GetConfigurator().Refresh(config);
-
-        switch (mode)
-        {
-        case COAST :
-            config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Coast;
-            break;
-        case BRAKE :
-            config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Brake;
-            break;
-        default :
-            break;
-        }
-
-        auto res = m_Talon->GetConfigurator().Apply(config);
-        // printf("neutral mode %s\n", res.GetName());
-
-        // ApplyConfig(config);
+        m_GenericMotor->SetNeutralMode(mode);
     }
 
     void CowMotorController::SetPID(double p, double i, double d, double f)
     {
-        auto config = ctre::phoenixpro::configs::Slot0Configs{};
-
-        config.kP = p;
-        config.kI = i;
-        config.kD = d;
-        config.kV = f;
-
-        ApplyConfig(config);
+        m_GenericMotor->SetPID(p,i,d,f);
     }
 
     void CowMotorController::SetMotionMagic(double velocity, double acceleration)
     {
-        auto config = ctre::phoenixpro::configs::MotionMagicConfigs{};
-
-        config.MotionMagicCruiseVelocity = velocity;
-        config.MotionMagicAcceleration   = acceleration;
-
-        ApplyConfig(config);
+        m_GenericMotor->SetMotionMagic(velocity,acceleration);
     }
 
     /**

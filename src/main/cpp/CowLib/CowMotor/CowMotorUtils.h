@@ -14,6 +14,7 @@ namespace CowMotor
     {
         PHOENIX_PRO,
         PHOENIX_V5,
+        PHOENIX_V6,
         VIRTUAL = 0xFF
     };
 

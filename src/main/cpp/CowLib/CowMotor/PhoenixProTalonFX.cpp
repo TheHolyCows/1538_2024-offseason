@@ -9,6 +9,8 @@ namespace CowMotor
         m_UseFOC            = true;
         m_OverrideBrakeMode = false;
         m_OutputDirection = 1;
+
+        ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
     }
 
     /**

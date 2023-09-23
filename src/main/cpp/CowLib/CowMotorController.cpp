@@ -110,6 +110,15 @@ namespace CowLib
         m_GenericMotor->ApplyConfig(config);
     }
 
+    /**
+     * @brief Gets current setpoint of the motor
+     * @return The current setpoint of the motor
+    */
+    double CowMotorController::GetSetpoint()
+    {
+        return m_GenericMotor->GetSetpoint();
+    }
+
     /** 
      * @brief Gets the current position of the motor
      * @return The position in turns
@@ -229,15 +238,15 @@ namespace CowLib
         m_GenericMotor->SetReversed(reversed);
     }
 
-    ctre::phoenixpro::hardware::TalonFX *CowMotorController::GetInternalTalon()
-    {
-        return m_Talon;
-    }
+    // ctre::phoenixpro::hardware::TalonFX *CowMotorController::GetInternalTalon()
+    // {
+    //     return m_Talon;
+    // }
 
     void CowMotorController::GetPIDData(double *setpoint, double *procVar, double *P, double *I, double *D)
     {
-        *setpoint = m_Setpoint;
-        *procVar  = GetPosition();
+        *setpoint = m_GenericMotor->GetSetpoint();
+        *procVar  = m_GenericMotor->GetPosition();
         *P        = -1;
         *I        = -1;
         *D        = -1;
@@ -245,9 +254,9 @@ namespace CowLib
 
     void CowMotorController::GetLogData(double *temp, double *encoderCt, bool *isInverted)
     {
-        *temp       = m_Talon->GetDeviceTemp().Refresh().GetValue().value();
-        *encoderCt  = GetPosition();
-        *isInverted = m_Talon->GetInverted();
+        *temp       = m_GenericMotor->GetTemp();
+        *encoderCt  = m_GenericMotor->GetPosition();
+        *isInverted = m_GenericMotor->GetInverted();
     }
 
 } // namespace CowLib

@@ -103,6 +103,11 @@ namespace CowMotor
      * getters
      **/
 
+    double PhoenixProTalonFX::GetSetpoint()
+    {
+        return m_Setpoint;
+    }
+
     double PhoenixProTalonFX::GetPosition()
     {
         return m_Talon->GetPosition().Refresh().GetValue().value();
@@ -111,6 +116,16 @@ namespace CowMotor
     double PhoenixProTalonFX::GetVelocity()
     {
         return m_Talon->GetVelocity().Refresh().GetValue().value();
+    }
+
+    double PhoenixProTalonFX::GetTemp()
+    {
+        m_Talon->GetDeviceTemp().Refresh().GetValue().value();
+    }
+
+    double PhoenixProTalonFX::GetInverted()
+    {
+        m_Talon->GetInverted();
     }
     
     double PhoenixProTalonFX::GetTorqueCurrent()

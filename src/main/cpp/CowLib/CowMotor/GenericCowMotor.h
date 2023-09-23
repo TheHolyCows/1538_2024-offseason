@@ -45,8 +45,11 @@ namespace CowMotor
                                               ctre::phoenixpro::configs::MotorOutputConfigs> config) = 0;
 
         /* getters */
+        virtual double GetSetpoint() = 0;
         virtual double GetPosition() = 0;
         virtual double GetVelocity() = 0;
+        virtual double GetTemp() = 0;
+        virtual double GetInverted() = 0;
         virtual double GetTorqueCurrent() = 0;
         virtual double GetRefreshTorqueCurrent() = 0;
         virtual CowMotor::NeutralMode GetNeutralMode() = 0;
@@ -60,9 +63,5 @@ namespace CowMotor
         virtual void SetReversed(bool reversed) = 0;
 
         // ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
-
-        /* logging */
-        virtual void GetPIDData(double *setpoint, double *procVar, double *P, double *I, double *D) = 0;
-        virtual void GetLogData(double *temp, double *encoderCt, bool *isInverted) = 0;
     };
 }

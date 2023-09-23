@@ -45,8 +45,11 @@ namespace CowMotor
                                               ctre::phoenixpro::configs::MotorOutputConfigs> config);
 
         /* getters */
+        double GetSetpoint();
         double GetPosition();
         double GetVelocity();
+        double GetTemp();
+        double GetInverted();
         double GetTorqueCurrent();
         double GetRefreshTorqueCurrent();
         CowMotor::NeutralMode GetNeutralMode();

@@ -10,6 +10,7 @@ namespace CowMotor
         m_OverrideBrakeMode = false;
         m_OutputDirection = 1;
 
+        // I think this just zeroes out the config so we start fresh each time
         ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
     }
 

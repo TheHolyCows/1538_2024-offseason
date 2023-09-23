@@ -278,4 +278,19 @@ namespace CowMotor
 
             ctre::phoenixpro::controls::Follower ToControlRequest() { return { LeaderID, Invert }; };
         };
+
+
+        /* configuration */
+        /**
+         * this is a pretty hack to be able to use config requests for Phoenix v5
+         * without redefining them as structs here (like with the control requests)
+         * the order of the enum must match the order of the variant specified in ApplyConfig()
+         */
+        enum ConfigRequestEn
+        {
+            TALON_FX_CFG = 0,
+            SLOT_0_CFG,
+            MOTION_MAGIC_CFG,
+            MOTOR_OUT_CFG
+        };
 }

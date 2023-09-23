@@ -97,6 +97,8 @@ namespace CowLib
 
     /**
      * @brief Applies a config to the motor controller
+     * please ensure that any changes to the ordering of the variant is reflected in the ConfigRequestEn enum
+     * in CowMotorUtils.h to ensure this function works with Phoenix v5 motors
      */
     void CowMotorController::ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
                                                       ctre::phoenixpro::configs::Slot0Configs,

@@ -12,4 +12,9 @@ namespace CowMotor
     {
         // test
     }
+
+    GenericCowMotor::~GenericCowMotor()
+    {
+        // test
+    }
 }

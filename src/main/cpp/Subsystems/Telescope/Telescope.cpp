@@ -12,8 +12,8 @@
 
 Telescope::Telescope(const int MotorId)
 {
-    m_TelescopeMotor.reset(new CowLib::CowMotorController(MotorId));
-    m_TelescopeMotor->SetNeutralMode(CowLib::CowMotorController::BRAKE);
+    m_TelescopeMotor.reset(new CowLib::CowMotorController(MotorId, CowMotor::PHOENIX_PRO));
+    m_TelescopeMotor->SetNeutralMode(CowMotor::BRAKE);
 
     ResetConstants();
 }
@@ -120,10 +120,10 @@ void Telescope::BrakeMode(bool brakeMode)
 {
     if (brakeMode)
     {
-        m_TelescopeMotor->SetNeutralMode(CowLib::CowMotorController::NeutralMode::BRAKE);
+        m_TelescopeMotor->SetNeutralMode(CowMotor::BRAKE);
     }
     else
     {
-        m_TelescopeMotor->SetNeutralMode(CowLib::CowMotorController::NeutralMode::COAST);
+        m_TelescopeMotor->SetNeutralMode(CowMotor::COAST);
     }
 }

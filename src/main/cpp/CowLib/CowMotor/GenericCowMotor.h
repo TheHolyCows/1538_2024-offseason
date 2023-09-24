@@ -5,8 +5,11 @@
 
 #pragma once
 
+#include "CowMotorUtils.h"
+
 #include <string>
 #include <variant>
+#include <ctre/phoenixpro/TalonFX.hpp>
 
 namespace CowMotor
 {   
@@ -18,23 +21,25 @@ namespace CowMotor
         public:
         GenericCowMotor();
         GenericCowMotor(int id, std::string bus);
+        virtual ~GenericCowMotor();
 
         /* remainder of the class is pure virtual */
 
+
         /* control requests */
-        virtual void Set(std::variant<PercentOutput,
-                                      VoltageOutput,
-                                      PositionPercentOutput,
-                                      PositionVoltage,
-                                      VelocityPercentOutput,
-                                      VelocityVoltage,
-                                      MotionMagicPercentOutput,
-                                      MotionMagicVoltage> request) = 0;
-        virtual void Set(std::variant<TorqueCurrentOutput, 
-                                      PositionTorqueCurrent,
-                                      VelocityTorqueCurrent, 
-                                      MotionMagicTorqueCurrent> request) = 0;
-        virtual void Set(Follower request) = 0;
+        virtual void Set(std::variant<CowMotor::PercentOutput,
+                                      CowMotor::VoltageOutput,
+                                      CowMotor::PositionPercentOutput,
+                                      CowMotor::PositionVoltage,
+                                      CowMotor::VelocityPercentOutput,
+                                      CowMotor::VelocityVoltage,
+                                      CowMotor::MotionMagicPercentOutput,
+                                      CowMotor::MotionMagicVoltage> request) = 0;
+        virtual void Set(std::variant<CowMotor::TorqueCurrentOutput, 
+                                      CowMotor::PositionTorqueCurrent,
+                                      CowMotor::VelocityTorqueCurrent, 
+                                      CowMotor::MotionMagicTorqueCurrent> request) = 0;
+        virtual void Set(CowMotor::Follower request) = 0;
 
         /* configuration */
         virtual void UseFOC(bool useFOC) = 0;

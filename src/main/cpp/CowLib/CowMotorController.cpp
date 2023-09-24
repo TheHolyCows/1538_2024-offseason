@@ -33,10 +33,11 @@ namespace CowLib
             case CowMotor::PHOENIX_V5:
                 m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
                 break;
-            // case CowMotor::PHOENIX_V6:
+            case CowMotor::PHOENIX_V6:
             //     m_GenericMotor = new CowMotor::PhoenixV6TalonFX(id,bus);
-            //     break;
-
+                break;
+            case CowMotor::VIRTUAL:
+                break;
         }
     }
 
@@ -168,7 +169,7 @@ namespace CowLib
      */
     int CowMotorController::SetSensorPosition(double turns)
     {
-        m_GenericMotor->SetSensorPosition(turns);
+        return m_GenericMotor->SetSensorPosition(turns);
     }
 
     void CowMotorController::SetNeutralMode(CowMotor::NeutralMode mode)

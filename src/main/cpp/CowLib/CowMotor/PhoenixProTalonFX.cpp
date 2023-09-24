@@ -14,6 +14,11 @@ namespace CowMotor
         ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
     }
 
+    PhoenixProTalonFX::~PhoenixProTalonFX()
+    {
+        delete m_Talon;
+    }
+
     /**
      * motor control requests
      **/
@@ -123,12 +128,12 @@ namespace CowMotor
 
     double PhoenixProTalonFX::GetTemp()
     {
-        m_Talon->GetDeviceTemp().Refresh().GetValue().value();
+        return m_Talon->GetDeviceTemp().Refresh().GetValue().value();
     }
 
     double PhoenixProTalonFX::GetInverted()
     {
-        m_Talon->GetInverted();
+        return m_Talon->GetInverted();
     }
     
     double PhoenixProTalonFX::GetTorqueCurrent()
@@ -184,7 +189,8 @@ namespace CowMotor
         }
 
         // not sure why this doesnt use apply config
-        auto res = m_Talon->GetConfigurator().Apply(config);
+        // auto res = m_Talon->GetConfigurator().Apply(config);  commented to remove warning
+        m_Talon->GetConfigurator().Apply(config);
     }
 
     void PhoenixProTalonFX::SetPID(double p, double i, double d, double f)

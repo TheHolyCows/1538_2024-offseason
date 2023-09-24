@@ -7,8 +7,14 @@ namespace CowMotor
         m_Talon = new ctre::phoenix::motorcontrol::can::TalonFX(id, std::move(bus));
         m_Setpoint = 0;
         m_OverrideBrakeMode = false;
+        m_OutputDirection = 1;
         m_NeutralMode = CowMotor::BRAKE;
         SetNeutralMode(m_NeutralMode);
+    }
+
+    PhoenixV5TalonFX::~PhoenixV5TalonFX()
+    {
+        delete m_Talon;
     }
 
     /**
@@ -34,10 +40,13 @@ namespace CowMotor
     {
         auto &talon       = m_Talon;
         double *setpoint  = &m_Setpoint;
+        int outputDirection = m_OutputDirection;
         auto &falcon_units_per_rot = FALCON_UNITS_PER_ROTATION;
-        visit([talon, setpoint, falcon_units_per_rot](auto &&req)
+
+        visit([talon, setpoint, outputDirection, falcon_units_per_rot](auto &&req)
         {
             ctre::phoenix::motorcontrol::TalonFXControlMode controlMode = req.GetControlMode();
+            req.MultiplySetpoint(outputDirection);
             switch (controlMode)
             {
                 case ctre::phoenix::motorcontrol::TalonFXControlMode::PercentOutput :
@@ -57,6 +66,8 @@ namespace CowMotor
                     *setpoint = req.GetSetpoint() * falcon_units_per_rot;
                     break;
                 case ctre::phoenix::motorcontrol::TalonFXControlMode::Disabled :
+                    break;
+                default:
                     break;
             }
         },
@@ -104,29 +115,35 @@ namespace CowMotor
                                                       ctre::phoenixpro::configs::MotionMagicConfigs,
                                                       ctre::phoenixpro::configs::MotorOutputConfigs> config)
     {
-        switch(config.index())
+        switch((int)config.index())
         {
-            case TALON_FX_CFG :
+            case CowMotor::ConfigRequestEn::TALON_FX_CFG :
                 // nothing
                 break;
-            case SLOT_0_CFG :
-                // closed loop slot 0 kP kI kD kV and kS
-                // same effect as using SetPID() but no F
-                ctre::phoenixpro::configs::Slot0Configs slot0Cfg = std::get<ctre::phoenixpro::configs::Slot0Configs>(config);
-                m_Talon->Config_kP(0, slot0Cfg.kP, 100);
-                m_Talon->Config_kI(0, slot0Cfg.kI, 100);
-                m_Talon->Config_kD(0, slot0Cfg.kD, 100);
-                break;
-            case MOTION_MAGIC_CFG :
-                // motion magic accel and velocity
-                // config also contains Jerk which is unsued here
-                ctre::phoenixpro::configs::MotionMagicConfigs mmCfg = std::get<ctre::phoenixpro::configs::MotionMagicConfigs>(config);
-                m_Talon->ConfigMotionAcceleration(mmCfg.MotionMagicAcceleration, 100);
-                m_Talon->ConfigMotionCruiseVelocity(mmCfg.MotionMagicCruiseVelocity, 100);
-                break;
-            case MOTOR_OUT_CFG :
+            case CowMotor::ConfigRequestEn::SLOT_0_CFG :
+                {
+                    // closed loop slot 0 kP kI kD kV and kS
+                    // same effect as using SetPID() but no F
+                    ctre::phoenixpro::configs::Slot0Configs slot0Cfg = std::get<ctre::phoenixpro::configs::Slot0Configs>(config);
+                    m_Talon->Config_kP(0, slot0Cfg.kP, 100);
+                    m_Talon->Config_kI(0, slot0Cfg.kI, 100);
+                    m_Talon->Config_kD(0, slot0Cfg.kD, 100);
+                    break;
+                }
+            case CowMotor::ConfigRequestEn::MOTION_MAGIC_CFG :
+                {
+                    // motion magic accel and velocity
+                    // config also contains Jerk which is unsued here
+                    ctre::phoenixpro::configs::MotionMagicConfigs mmCfg = std::get<ctre::phoenixpro::configs::MotionMagicConfigs>(config);
+                    m_Talon->ConfigMotionAcceleration(mmCfg.MotionMagicAcceleration, 100);
+                    m_Talon->ConfigMotionCruiseVelocity(mmCfg.MotionMagicCruiseVelocity, 100);
+                    break;
+                }
+            case CowMotor::ConfigRequestEn::MOTOR_OUT_CFG :
                 // config for inverted, neutral mode, DutyCycleNeutralDeadband, PeakForwardDutyCycle, and PeakReverseDutyCycle
                 // this is already covered in other commands, ignoring it for now
+                break;
+            default:
                 break;
         }
     }
@@ -175,4 +192,55 @@ namespace CowMotor
     }
 
     /* setters */
+    int PhoenixV5TalonFX::SetSensorPosition(double turns)
+    {
+        return m_Talon->SetSelectedSensorPosition(0, turns*FALCON_UNITS_PER_ROTATION);
+    }
+
+    void PhoenixV5TalonFX::SetNeutralMode(CowMotor::NeutralMode mode)
+    {
+        m_NeutralMode = mode;
+        switch (mode)
+        {
+            case CowMotor::BRAKE:
+                m_Talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+                break;
+            case CowMotor::COAST:
+                m_Talon->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void PhoenixV5TalonFX::SetPID(double p, double i, double d, double f)
+    {
+        m_Talon->Config_kP(0, p, 100);
+        m_Talon->Config_kI(0, i, 100);
+        m_Talon->Config_kD(0, d, 100);
+        m_Talon->Config_kF(0, f, 100);
+    }
+
+    void PhoenixV5TalonFX::SetMotionMagic(double velocity, double acceleration)
+    {
+        m_Talon->ConfigMotionAcceleration(acceleration,100);
+        m_Talon->ConfigMotionCruiseVelocity(velocity,100);
+    }
+
+    void PhoenixV5TalonFX::SetInverted(bool inverted)
+    {
+        m_Talon->SetInverted(inverted);
+    }
+    
+    void PhoenixV5TalonFX::SetReversed(bool reversed)
+    {
+        if (reversed)
+        {
+            m_OutputDirection = -1;
+        }
+        else
+        {
+            m_OutputDirection = 1;
+        }
+    }
 }

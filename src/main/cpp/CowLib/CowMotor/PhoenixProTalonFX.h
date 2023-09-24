@@ -18,6 +18,7 @@ namespace CowMotor
     {
     public:
         PhoenixProTalonFX(int id, std::string bus);
+        ~PhoenixProTalonFX();
 
         /* control requests */
         void Set(std::variant<PercentOutput,

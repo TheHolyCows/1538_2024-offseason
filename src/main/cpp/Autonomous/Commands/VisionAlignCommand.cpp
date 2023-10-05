@@ -16,30 +16,8 @@ bool VisionAlignCommand::IsComplete(CowRobot *robot)
         return true;
     }
 
-    // // not done if yaw not correct
-    // if (m_Gyro.GetYawDegrees() < CONSTANT("HEADING_TOLERANCE"))
-    // {
-    //     return false;
-    // }
-    //
-    // switch (m_Cargo)
-    // {
-    // case ARM_CARGO::CG_CUBE :
-    //     if (Vision::GetInstance()->CubeYAligned())
-    //     {
-    //         return true;
-    //     }
-    //     break;
-    // case ARM_CARGO::CG_CONE :
-    //     if (Vision::GetInstance()->ConeYAligned())
-    //     {
-    //         return true;
-    //     }
-    //     break;
-    // default :
-    //     break;
-    // }
-    //
+    //     Vision::GetInstance()->CubeYAligned()
+
     return false;
 }
 
@@ -51,17 +29,6 @@ void VisionAlignCommand::Start(CowRobot *robot)
 void VisionAlignCommand::Handle(CowRobot *robot)
 {
     robot->GetDriveController()->LockHeading(0, 0);
-    // switch (m_Cargo)
-    // {
-    // case ARM_CARGO::CG_CUBE :
-    //     robot->GetDriveController()->CubeAlign(0);
-    //     break;
-    // case ARM_CARGO::CG_CONE :
-    //     robot->GetDriveController()->ConeAlign(0, 0);
-    //     break;
-    // default :
-    //     break;
-    // }
 }
 
 void VisionAlignCommand::Finish(CowRobot *robot)

@@ -13,7 +13,6 @@
 #include "../CowLib/CowLib.h"
 #include "../CowRobot.h"
 #include "../Declarations.h"
-#include "../Subsystems/ArmState.h"
 #include "../Subsystems/Vision.h"
 #include "frc/controller/PIDController.h"
 
@@ -26,8 +25,6 @@ class OperatorController : public GenericController
 private:
     OperatorController();
     GenericControlBoard *m_CB;
-
-    bool m_WristFlipCheck;
 
     // enum Wheel
     // {

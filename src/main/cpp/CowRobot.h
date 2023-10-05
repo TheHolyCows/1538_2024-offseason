@@ -34,7 +34,6 @@ public:
     SwerveDrive *m_Drivetrain;
 
 private:
-    Arm *m_Arm;
 
     int m_DSUpdateCount;
 
@@ -63,10 +62,6 @@ private:
     double m_MatchTime;
     double m_StartTime;
 
-    bool m_AutoStowAllowed = false;
-
-    ARM_STATE m_PrevArmState;
-
 public:
     CowRobot();
     void Reset();
@@ -85,15 +80,9 @@ public:
 
     SwerveDriveController *GetDriveController() { return m_DriveController; }
 
-    Arm *GetArm() { return m_Arm; }
-
     void Handle();
 
     void DoNothing(void);
-
-    void AllowAutoStow();
-    void SetArmState(ARM_STATE, ARM_CARGO);
-    void ArmSM();
 };
 
 #endif

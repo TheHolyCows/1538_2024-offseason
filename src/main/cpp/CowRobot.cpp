@@ -39,12 +39,6 @@ CowRobot::CowRobot()
     m_Drivetrain->ResetEncoders();
 
     m_DriveController = new SwerveDriveController(*m_Drivetrain);
-
-    m_Arm = new Arm(9, 10, 11, 12, 4);
-
-    m_PrevArmState = ARM_NONE;
-
-    m_Arm->SetArmCargo(CG_CONE);
 }
 
 /**
@@ -58,7 +52,6 @@ void CowRobot::Reset()
 
     m_Drivetrain->ResetConstants();
     m_DriveController->ResetConstants();
-    m_Arm->ResetConstants();
     // m_Controller->ResetConstants(); TODO: error
 
     Vision::GetInstance()->Reset();
@@ -96,11 +89,8 @@ void CowRobot::Handle()
         return;
     }
 
-    ArmSM();
-
     m_Controller->Handle(this);
     m_Drivetrain->Handle();
-    m_Arm->Handle();
 
     // logger code below should have checks for debug mode before sending out data
     CowLib::CowLogger::GetInstance()->Handle();
@@ -147,147 +137,4 @@ void CowRobot::StartTime()
 void CowRobot::DoNothing()
 {
     // TODO: make the robot stop (including drive)
-}
-
-/**
- * @brief enables automatic stow when intaking cargo
- * only called by OperatorController when intaking
-*/
-void CowRobot::AllowAutoStow()
-{
-    if (m_Arm->GetArmState() == ARM_GND)
-    {
-        if (!m_AutoStowAllowed)
-        {
-            m_Arm->GetClaw().ResetStowTimer();
-        }
-        m_AutoStowAllowed = true;
-    }
-    else
-    {
-        m_AutoStowAllowed = false;
-    }
-}
-
-/**
- * @brief Updates arm state based on inputs from operator
- * 
- */
-void CowRobot::SetArmState(ARM_STATE state, ARM_CARGO cargo)
-{
-    m_Arm->UseManualControl(false);
-
-    if (state != m_Arm->GetArmState())
-    {
-        m_PrevArmState = m_Arm->GetArmState();
-    }
-    // set to driver stow if stow is pressed after scoring or if currently in DRIVER_STOW and button is hit
-    if (state == ARM_DRIVER_STOW
-        && (m_PrevArmState == ARM_L2 || m_PrevArmState == ARM_L3 || m_Arm->GetArmState() == ARM_DRIVER_STOW))
-    {
-        m_Arm->SetArmState(state);
-    }
-    else if (state == ARM_DRIVER_STOW) // otherwise set to standard stow
-    {
-        m_Arm->SetArmState(ARM_STOW);
-    }
-    else
-    {
-        m_Arm->SetArmState(state);
-    }
-
-    //    if (state == ARM_IN)
-    //    {
-    //        m_Arm->SetArmCargo(cargo);
-    //    }
-}
-
-/**
- * called each cycle by operator controller (at the bottom)
-*/
-void CowRobot::ArmSM()
-{
-    switch (m_Arm->GetArmState())
-    {
-    case ARM_NONE :
-        // this state is only reachable from toggling intake
-        // should only turn intake off?
-        m_Arm->UpdateClawState();
-        break;
-    case ARM_STOW :
-        m_Arm->UpdateClawState();
-        m_Arm->RequestPosition(CONSTANT("ARM_STOW_ANGLE"), CONSTANT("ARM_STOW_EXT"));
-        break;
-    case ARM_L3 :
-        if (m_Arm->GetArmCargo() == CG_CUBE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_L3_CUBE_ANGLE"),
-                                   CONSTANT("ARM_L3_CUBE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_L3_CUBE"));
-        }
-        else if (m_Arm->GetArmCargo() == CG_CONE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_L3_CONE_ANGLE"),
-                                   CONSTANT("ARM_L3_CONE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_SCORE_CONE"));
-        }
-        break;
-    case ARM_L2 :
-        if (m_Arm->GetArmCargo() == CG_CUBE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_L2_CUBE_ANGLE"),
-                                   CONSTANT("ARM_L2_CUBE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_L2_CUBE"));
-        }
-        else if (m_Arm->GetArmCargo() == CG_CONE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_L2_CONE_ANGLE"),
-                                   CONSTANT("ARM_L2_CONE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_SCORE_CONE"));
-        }
-        break;
-    case ARM_GND :
-        // auto stow check - should be called every cycle in ARM_GND
-        if (m_AutoStowAllowed && m_Arm->GetClaw().IsStalled())
-        {
-            SetArmState(ARM_STOW, CG_NONE);
-            m_AutoStowAllowed = false;
-            break;
-        }
-
-        if (m_Arm->GetArmCargo() == CG_CUBE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_GND_CUBE_ANGLE"),
-                                   CONSTANT("ARM_GND_CUBE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_IN_CUBE"));
-        }
-        else
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_GND_CONE_ANGLE"),
-                                   CONSTANT("ARM_GND_CONE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_IN_CONE"));
-        }
-        break;
-    case ARM_HUMAN :
-        if (m_Arm->GetArmCargo() == CG_CUBE)
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_HUM_CUBE_ANGLE"),
-                                   CONSTANT("ARM_HUM_CUBE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_HUM_CUBE"));
-        }
-        else
-        {
-            m_Arm->RequestPosition(CONSTANT("ARM_HUM_CONE_ANGLE"),
-                                   CONSTANT("ARM_HUM_CONE_EXT"),
-                                   CONSTANT("WRIST_OFFSET_HUM_CONE"));
-        }
-        break;
-    case ARM_DRIVER_STOW :
-        m_Arm->RequestSafeStow();
-        break;
-    case ARM_UP :
-        m_Arm->RequestPosition(0, 0);
-    default :
-        break;
-    }
 }

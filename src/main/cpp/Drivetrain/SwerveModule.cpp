@@ -11,8 +11,8 @@ SwerveModule::SwerveModule(const int id,
                            const double encoderOffset)
     : SwerveModuleInterface(id, encoderOffset)
 {
-    m_DriveMotor    = std::make_unique<CowLib::CowMotorController>(driveMotor, "cowdrive");
-    m_RotationMotor = std::make_unique<CowLib::CowMotorController>(rotationMotor, "cowdrive");
+    m_DriveMotor    = std::make_unique<CowLib::CowMotorController>(driveMotor, CowMotor::PHOENIX_PRO, "cowdrive");
+    m_RotationMotor = std::make_unique<CowLib::CowMotorController>(rotationMotor, CowMotor::PHOENIX_PRO, "cowdrive");
     m_Encoder       = std::make_unique<CowLib::CowCANCoder>(encoderId);
 
     m_DriveControlRequest = { 0 };
@@ -144,10 +144,10 @@ void SwerveModule::SetBrakeMode(bool brakeMode)
 
     if (m_BrakeMode)
     {
-        m_DriveMotor->SetNeutralMode(CowLib::CowMotorController::BRAKE);
+        m_DriveMotor->SetNeutralMode(CowMotor::BRAKE);
     }
     else
     {
-        m_DriveMotor->SetNeutralMode(CowLib::CowMotorController::COAST);
+        m_DriveMotor->SetNeutralMode(CowMotor::COAST);
     }
 }

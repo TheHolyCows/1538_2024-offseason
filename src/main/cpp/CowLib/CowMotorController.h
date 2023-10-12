@@ -5,6 +5,12 @@
 #ifndef __COWLIB_COWMOTORCONTROLLER_H__
 #define __COWLIB_COWMOTORCONTROLLER_H__
 
+#include "CowMotor/CowMotorUtils.h"
+#include "CowMotor/GenericCowMotor.h"
+#include "CowMotor/PhoenixProTalonFX.h"
+#include "CowMotor/PhoenixV6TalonFX.h"
+#include "CowMotor/PhoenixV5TalonFX.h"
+
 #include <ctre/phoenixpro/TalonFX.hpp>
 #include <variant>
 
@@ -17,6 +23,9 @@ namespace CowLib
         double m_Setpoint;
         bool m_UseFOC;
         bool m_OverrideBrakeMode;
+
+        CowMotor::GenericCowMotor *m_GenericMotor;
+        void InitializeInternalMotor(int id, CowMotor::MotorType, std::string bus);
 
     public:
         struct PercentOutput
@@ -219,50 +228,53 @@ namespace CowLib
             BRAKE
         };
 
-        CowMotorController(int id, std::string bus = "cowbus");
+        CowMotorController(int id, CowMotor::MotorType motorType, std::string bus = "cowbus");
 
         ~CowMotorController();
 
-        void Set(std::variant<PercentOutput,
-                              VoltageOutput,
-                              PositionPercentOutput,
-                              PositionVoltage,
-                              VelocityPercentOutput,
-                              VelocityVoltage,
-                              MotionMagicPercentOutput,
-                              MotionMagicVoltage> request);
+        /* control requests */
+        void Set(std::variant<CowMotor::PercentOutput,
+                              CowMotor::VoltageOutput,
+                              CowMotor::PositionPercentOutput,
+                              CowMotor::PositionVoltage,
+                              CowMotor::VelocityPercentOutput,
+                              CowMotor::VelocityVoltage,
+                              CowMotor::MotionMagicPercentOutput,
+                              CowMotor::MotionMagicVoltage> request);
+        void Set(std::variant<CowMotor::TorqueCurrentOutput, 
+                              CowMotor::PositionTorqueCurrent, 
+                              CowMotor::VelocityTorqueCurrent, 
+                              CowMotor::MotionMagicTorqueCurrent> request);
+        void Set(CowMotor::Follower request);
 
-        void
-        Set(std::variant<TorqueCurrentOutput, PositionTorqueCurrent, VelocityTorqueCurrent, MotionMagicTorqueCurrent>
-                request);
-
-        void Set(Follower request);
-
+        /* configuration */
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);
-
         void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
                                       ctre::phoenixpro::configs::Slot0Configs,
                                       ctre::phoenixpro::configs::MotionMagicConfigs,
                                       ctre::phoenixpro::configs::MotorOutputConfigs> config);
 
+        /* getters */
+        double GetSetpoint();
         double GetPosition();
         double GetVelocity();
         double GetTorqueCurrent();
         double GetRefreshTorqueCurrent();
+        CowMotor::NeutralMode GetNeutralMode();
 
+        /* setters */
         int SetSensorPosition(double turns);
-
-        void SetNeutralMode(NeutralMode mode);
-        NeutralMode GetNeutralMode();
-
+        void SetNeutralMode(CowMotor::NeutralMode mode);
         void SetPID(double p, double i, double d, double f = 0.0);
         void SetMotionMagic(double velocity, double acceleration);
-
         void SetInverted(bool inverted);
+        void SetReversed(bool reversed);
 
-        ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
+        // not necessary?
+        // ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
 
+        /* logging */
         void GetPIDData(double *setpoint, double *procVar, double *P, double *I, double *D);
         void GetLogData(double *temp, double *encoderCt, bool *isInverted);
     };

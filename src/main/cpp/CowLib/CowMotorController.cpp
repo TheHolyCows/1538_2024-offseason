@@ -10,72 +10,74 @@ namespace CowLib
      * @brief Construct a new Cow Motor Controller
      * @param id The CAN ID of the motor controller
      */
-    CowMotorController::CowMotorController(int id, std::string bus)
-    {
-        m_Talon             = new ctre::phoenixpro::hardware::TalonFX(id, std::move(bus));
-        m_Setpoint          = 0;
-        m_UseFOC            = true;
-        m_OverrideBrakeMode = false;
-
-        ApplyConfig(ctre::phoenixpro::configs::TalonFXConfiguration{});
+    CowMotorController::CowMotorController(int id, CowMotor::MotorType motorType, std::string bus)
+    { 
+        InitializeInternalMotor(id, CowMotor::PHOENIX_PRO, bus);
 
         CowLogger::GetInstance()->RegisterMotor(id, this);
     }
 
     CowMotorController::~CowMotorController()
     {
-        delete m_Talon;
+        // delete m_Talon;
+        delete m_GenericMotor;
+    }
+
+    void CowMotorController::InitializeInternalMotor(int id, CowMotor::MotorType motorType, std::string bus)
+    {
+        switch (motorType)
+        {
+            case CowMotor::PHOENIX_PRO:
+                m_GenericMotor = new CowMotor::PhoenixProTalonFX(id,bus);
+                break;
+            case CowMotor::PHOENIX_V5:
+                m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
+                break;
+            case CowMotor::PHOENIX_V6:
+                m_GenericMotor = new CowMotor::PhoenixV6TalonFX(id,bus);
+                break;
+            case CowMotor::VIRTUAL:
+                break;
+        }
     }
 
     /**
      * @brief Set the motor controller with a control request struct
      * @param request The control request struct
      */
-    void CowMotorController::Set(std::variant<PercentOutput,
-                                              VoltageOutput,
-                                              PositionPercentOutput,
-                                              PositionVoltage,
-                                              VelocityPercentOutput,
-                                              VelocityVoltage,
-                                              MotionMagicPercentOutput,
-                                              MotionMagicVoltage> request)
+    void CowMotorController::Set(std::variant<CowMotor::PercentOutput,
+                                              CowMotor::VoltageOutput,
+                                              CowMotor::PositionPercentOutput,
+                                              CowMotor::PositionVoltage,
+                                              CowMotor::VelocityPercentOutput,
+                                              CowMotor::VelocityVoltage,
+                                              CowMotor::MotionMagicPercentOutput,
+                                              CowMotor::MotionMagicVoltage> request)
     {
-        auto &talon            = m_Talon;
-        double *setpoint       = &m_Setpoint;
-        bool useFOC            = m_UseFOC;
-        bool overrideBrakeMode = m_OverrideBrakeMode;
-
-        visit(
-            [talon, setpoint, useFOC, overrideBrakeMode](auto &&req)
-            {
-                talon->SetControl(
-                    req.ToControlRequest().WithEnableFOC(useFOC).WithOverrideBrakeDurNeutral(overrideBrakeMode));
-                *setpoint = req.GetSetpoint();
-            },
-            request);
+        m_GenericMotor->Set(request);
     }
 
-    // Overload for TorqueControl requests because they always use FOC
-    void CowMotorController::Set(
-        std::variant<TorqueCurrentOutput, PositionTorqueCurrent, VelocityTorqueCurrent, MotionMagicTorqueCurrent>
-            request)
+    /**
+     * @brief Overload for TorqueControl requests because they always use FOC
+     * 
+     * @param request 
+     */
+    void CowMotorController::Set(std::variant<CowMotor::TorqueCurrentOutput,
+                                              CowMotor::PositionTorqueCurrent,
+                                              CowMotor::VelocityTorqueCurrent,
+                                              CowMotor::MotionMagicTorqueCurrent> request)
     {
-        auto &talon      = m_Talon;
-        double *setpoint = &m_Setpoint;
-        visit(
-            [talon, setpoint](auto &&req)
-            {
-                talon->SetControl(req.ToControlRequest());
-                *setpoint = req.GetSetpoint();
-            },
-            request);
+        m_GenericMotor->Set(request);
     }
 
-    // Overload for follwer request because it's special
-    void CowMotorController::Set(Follower request)
+    /**
+     * @brief Overload for follwer request because it's special
+     * 
+     * @param request 
+     */
+    void CowMotorController::Set(CowMotor::Follower request)
     {
-        m_Talon->SetControl(request.ToControlRequest());
-        m_Setpoint = request.LeaderID;
+        m_GenericMotor->Set(request);
     }
 
     /** 
@@ -83,7 +85,7 @@ namespace CowLib
      */
     void CowMotorController::UseFOC(bool useFOC)
     {
-        m_UseFOC = useFOC;
+        m_GenericMotor->UseFOC(useFOC);
     }
 
     /**
@@ -91,29 +93,29 @@ namespace CowLib
      */
     void CowMotorController::OverrideBrakeMode(bool overrideBrakeMode)
     {
-        m_OverrideBrakeMode = overrideBrakeMode;
+        m_GenericMotor->OverrideBrakeMode(overrideBrakeMode);
     }
 
     /**
      * @brief Applies a config to the motor controller
+     * please ensure that any changes to the ordering of the variant is reflected in the ConfigRequestEn enum
+     * in CowMotorUtils.h to ensure this function works with Phoenix v5 motors
      */
     void CowMotorController::ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
                                                       ctre::phoenixpro::configs::Slot0Configs,
                                                       ctre::phoenixpro::configs::MotionMagicConfigs,
                                                       ctre::phoenixpro::configs::MotorOutputConfigs> config)
     {
-        auto &configuator = m_Talon->GetConfigurator();
+        m_GenericMotor->ApplyConfig(config);
+    }
 
-        visit(
-            [&configuator](auto &&config)
-            {
-                ctre::phoenix::StatusCode res;
-                // do
-                // {
-                res = configuator.Apply(config);
-                // } while (!res.IsOK());
-            },
-            config);
+    /**
+     * @brief Gets current setpoint of the motor
+     * @return The current setpoint of the motor
+    */
+    double CowMotorController::GetSetpoint()
+    {
+        return m_GenericMotor->GetSetpoint();
     }
 
     /** 
@@ -122,7 +124,7 @@ namespace CowLib
      */
     double CowMotorController::GetPosition()
     {
-        return m_Talon->GetPosition().Refresh().GetValue().value();
+        return m_GenericMotor->GetPosition();
     }
 
     /** 
@@ -131,7 +133,7 @@ namespace CowLib
      */
     double CowMotorController::GetVelocity()
     {
-        return m_Talon->GetVelocity().Refresh().GetValue().value();
+        return m_GenericMotor->GetVelocity();
     }
 
     /** 
@@ -142,7 +144,7 @@ namespace CowLib
      */
     double CowMotorController::GetTorqueCurrent()
     {
-        return m_Talon->GetTorqueCurrent().GetValue().value();
+        return m_GenericMotor->GetTorqueCurrent();
     }
 
     /** 
@@ -153,7 +155,12 @@ namespace CowLib
      */
     double CowMotorController::GetRefreshTorqueCurrent()
     {
-        return m_Talon->GetTorqueCurrent().Refresh().GetValue().value();
+        return m_GenericMotor->GetRefreshTorqueCurrent();
+    }
+
+    CowMotor::NeutralMode CowMotorController::GetNeutralMode()
+    {
+        return m_GenericMotor->GetNeutralMode();
     }
 
     /** 
@@ -162,84 +169,53 @@ namespace CowLib
      */
     int CowMotorController::SetSensorPosition(double turns)
     {
-        return m_Talon->SetRotorPosition(units::turn_t{ turns });
+        return m_GenericMotor->SetSensorPosition(turns);
     }
 
-    void CowMotorController::SetNeutralMode(NeutralMode mode)
+    void CowMotorController::SetNeutralMode(CowMotor::NeutralMode mode)
     {
-        auto config = ctre::phoenixpro::configs::MotorOutputConfigs{};
-        m_Talon->GetConfigurator().Refresh(config);
-
-        switch (mode)
-        {
-        case COAST :
-            config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Coast;
-            break;
-        case BRAKE :
-            config.NeutralMode = ctre::phoenixpro::signals::NeutralModeValue::Brake;
-            break;
-        default :
-            break;
-        }
-
-        auto res = m_Talon->GetConfigurator().Apply(config);
-        // printf("neutral mode %s\n", res.GetName());
-
-        // ApplyConfig(config);
-    }
-
-    CowMotorController::NeutralMode CowMotorController::GetNeutralMode()
-    {
-        auto config = ctre::phoenixpro::configs::MotorOutputConfigs{};
-        m_Talon->GetConfigurator().Refresh(config);
-
-        switch (config.NeutralMode.value)
-        {
-        case ctre::phoenixpro::signals::NeutralModeValue::Coast :
-            return COAST;
-        case ctre::phoenixpro::signals::NeutralModeValue::Brake :
-            return BRAKE;
-        default :
-            return COAST;
-        }
+        m_GenericMotor->SetNeutralMode(mode);
     }
 
     void CowMotorController::SetPID(double p, double i, double d, double f)
     {
-        auto config = ctre::phoenixpro::configs::Slot0Configs{};
-
-        config.kP = p;
-        config.kI = i;
-        config.kD = d;
-        config.kV = f;
-
-        ApplyConfig(config);
+        m_GenericMotor->SetPID(p,i,d,f);
     }
 
     void CowMotorController::SetMotionMagic(double velocity, double acceleration)
     {
-        auto config = ctre::phoenixpro::configs::MotionMagicConfigs{};
-
-        config.MotionMagicCruiseVelocity = velocity;
-        config.MotionMagicAcceleration   = acceleration;
-
-        ApplyConfig(config);
+        m_GenericMotor->SetMotionMagic(velocity,acceleration);
     }
 
+    /**
+     * @brief inverts the motor
+     * honestly I dont think that this does what we think it does, use with caution
+     * @param inverted true/false
+     */
     void CowMotorController::SetInverted(bool inverted)
     {
-        m_Talon->SetInverted(inverted);
+        m_GenericMotor->SetInverted(inverted);
     }
 
-    ctre::phoenixpro::hardware::TalonFX *CowMotorController::GetInternalTalon()
+    /**
+     * @brief reverses the direction of the motor ouput by multiplying all set values by -1
+     * not valid if using follower control requests
+     * @param reversed true/false - true will set multiplier to -1, false (default) will be 1
+     */
+    void CowMotorController::SetReversed(bool reversed)
     {
-        return m_Talon;
+        m_GenericMotor->SetReversed(reversed);
     }
+
+    // ctre::phoenixpro::hardware::TalonFX *CowMotorController::GetInternalTalon()
+    // {
+    //     return m_Talon;
+    // }
 
     void CowMotorController::GetPIDData(double *setpoint, double *procVar, double *P, double *I, double *D)
     {
-        *setpoint = m_Setpoint;
-        *procVar  = GetPosition();
+        *setpoint = m_GenericMotor->GetSetpoint();
+        *procVar  = m_GenericMotor->GetPosition();
         *P        = -1;
         *I        = -1;
         *D        = -1;
@@ -247,9 +223,9 @@ namespace CowLib
 
     void CowMotorController::GetLogData(double *temp, double *encoderCt, bool *isInverted)
     {
-        *temp       = m_Talon->GetDeviceTemp().Refresh().GetValue().value();
-        *encoderCt  = GetPosition();
-        *isInverted = m_Talon->GetInverted();
+        *temp       = m_GenericMotor->GetTemp();
+        *encoderCt  = m_GenericMotor->GetPosition();
+        *isInverted = m_GenericMotor->GetInverted();
     }
 
 } // namespace CowLib

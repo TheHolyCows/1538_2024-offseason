@@ -8,6 +8,7 @@
 #include "CowMotor/CowMotorUtils.h"
 #include "CowMotor/GenericCowMotor.h"
 #include "CowMotor/PhoenixProTalonFX.h"
+#include "CowMotor/PhoenixV6TalonFX.h"
 #include "CowMotor/PhoenixV5TalonFX.h"
 
 #include <ctre/phoenixpro/TalonFX.hpp>

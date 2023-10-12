@@ -34,7 +34,7 @@ namespace CowLib
                 m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
                 break;
             case CowMotor::PHOENIX_V6:
-            //     m_GenericMotor = new CowMotor::PhoenixV6TalonFX(id,bus);
+                m_GenericMotor = new CowMotor::PhoenixV6TalonFX(id,bus);
                 break;
             case CowMotor::VIRTUAL:
                 break;

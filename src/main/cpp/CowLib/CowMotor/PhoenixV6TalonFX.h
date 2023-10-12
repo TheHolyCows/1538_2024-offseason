@@ -8,7 +8,7 @@
 #include "GenericCowMotor.h"
 #include "CowMotorUtils.h"
 
-// #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/TalonFX.hpp>
 #include <variant>
 
 
@@ -18,6 +18,7 @@ namespace CowMotor
     {
     public:
         PhoenixV6TalonFX(int id, std::string bus);
+        ~PhoenixV6TalonFX();
 
         /* control requests */
         void Set(std::variant<PercentOutput,
@@ -39,10 +40,10 @@ namespace CowMotor
         /* configuration */
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);
-        void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                              ctre::phoenixpro::configs::Slot0Configs,
-                                              ctre::phoenixpro::configs::MotionMagicConfigs,
-                                              ctre::phoenixpro::configs::MotorOutputConfigs> config);
+        void ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                              ctre::phoenix6::configs::Slot0Configs,
+                                              ctre::phoenix6::configs::MotionMagicConfigs,
+                                              ctre::phoenix6::configs::MotorOutputConfigs> config);
 
         /* getters */
         double GetSetpoint();
@@ -63,7 +64,7 @@ namespace CowMotor
         void SetReversed(bool reversed);
 
     private:
-        ctre::phoenixpro::hardware::TalonFX *m_Talon;
+        ctre::phoenix6::hardware::TalonFX *m_Talon;
         
         double m_Setpoint;
         bool m_UseFOC;

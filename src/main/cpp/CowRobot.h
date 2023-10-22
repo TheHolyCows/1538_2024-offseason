@@ -14,8 +14,6 @@
 #include "CowLib/CowTimer.h"
 #include "CowLib/Utility.h"
 #include "CowPigeon.h"
-#include "Drivetrain/SwerveDrive.h"
-#include "Drivetrain/SwerveDriveController.h"
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
 
@@ -28,8 +26,7 @@
 class CowRobot
 {
 public:
-    // Drive Motors
-    SwerveDrive *m_Drivetrain;
+//
 
 private:
 
@@ -37,7 +34,6 @@ private:
 
     GenericController *m_Controller = nullptr;
 
-    SwerveDriveController *m_DriveController;
 
     // gyro and accelerometers
     CowPigeon *m_Gyro;
@@ -74,9 +70,11 @@ public:
 
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
-    SwerveDrive *GetDrivetrain() { return m_Drivetrain; }
+    // TODO: return the drivetrain
+    // SwerveDrive *GetDrivetrain() { return NULL; }
 
-    SwerveDriveController *GetDriveController() { return m_DriveController; }
+    // TODO: return the drive controller
+    // SwerveDriveController *GetDriveController() { return NULL; }
 
     void Handle();
 

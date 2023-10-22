@@ -18,6 +18,14 @@ CowRobot::CowRobot()
     m_PreviousGyroError = 0;
     // m_Gyro->Reset(); - don't know why we have this commented
     m_Accelerometer = new frc::BuiltInAccelerometer(frc::Accelerometer::kRange_4G);
+
+
+    // TODO: initialize the SwerveDrive
+
+    
+    // TODO: intitialize the SwerveDriveController
+
+
 }
 
 /**

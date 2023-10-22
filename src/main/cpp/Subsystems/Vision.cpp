@@ -267,18 +267,3 @@ double Vision::GetTargetX()
 {
     return GetLimelightTable()->GetNumber("tx", 0.0);
 }
-
-void Vision::SetCargo(ARM_CARGO cargo)
-{
-    switch (cargo)
-    {
-    case ARM_CARGO::CG_CUBE :
-        RequestPipeline(LL_PIPELINE_APRIL_TAG_3D);
-        break;
-    case ARM_CARGO::CG_CONE :
-        RequestPipeline(LL_PIPELINE_REFLECTIVE_TAPE);
-        break;
-    default :
-        break;
-    }
-}

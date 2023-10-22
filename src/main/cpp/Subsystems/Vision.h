@@ -18,7 +18,6 @@
 #include <pathplanner/lib/PathPlanner.h>
 #include <units/length.h>
 #include <vector>
-#include "ArmState.h"
 
 #define LL_PIPELINE_APRIL_TAG_2D 0
 #define LL_PIPELINE_APRIL_TAG_3D 2
@@ -69,7 +68,7 @@ public:
 
     void SetInverted(bool flipped);
 
-    void SetCargo(ARM_CARGO cargo);
+    // void SetCargo(ARM_CARGO cargo);
 };
 
 #endif /* __VISION_H__ */

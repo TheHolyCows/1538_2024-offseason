@@ -7,6 +7,7 @@
  * @brief Construct a new SwerveDrive object
  *
  * @param moduleConstants Array of constants for each module
+ * @param wheelBase distance between the center of each swerve module on one edge in feet
  */
 SwerveDrive::SwerveDrive(ModuleConstants moduleConstants[4], double wheelBase)
 {

@@ -12,7 +12,7 @@ namespace CowLib
      */
     CowMotorController::CowMotorController(int id, CowMotor::MotorType motorType, std::string bus)
     { 
-        InitializeInternalMotor(id, CowMotor::PHOENIX_PRO, bus);
+        InitializeInternalMotor(id, motorType, bus);
 
         CowLogger::GetInstance()->RegisterMotor(id, this);
     }

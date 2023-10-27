@@ -110,10 +110,10 @@ namespace CowMotor
         m_OverrideBrakeMode = overrideBrakeMode;
     }
     
-    void PhoenixV5TalonFX::ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                                      ctre::phoenixpro::configs::Slot0Configs,
-                                                      ctre::phoenixpro::configs::MotionMagicConfigs,
-                                                      ctre::phoenixpro::configs::MotorOutputConfigs> config)
+    void PhoenixV5TalonFX::ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                                      ctre::phoenix6::configs::Slot0Configs,
+                                                      ctre::phoenix6::configs::MotionMagicConfigs,
+                                                      ctre::phoenix6::configs::MotorOutputConfigs> config)
     {
         switch((int)config.index())
         {
@@ -124,7 +124,7 @@ namespace CowMotor
                 {
                     // closed loop slot 0 kP kI kD kV and kS
                     // same effect as using SetPID() but no F
-                    ctre::phoenixpro::configs::Slot0Configs slot0Cfg = std::get<ctre::phoenixpro::configs::Slot0Configs>(config);
+                    ctre::phoenix6::configs::Slot0Configs slot0Cfg = std::get<ctre::phoenix6::configs::Slot0Configs>(config);
                     m_Talon->Config_kP(0, slot0Cfg.kP, 100);
                     m_Talon->Config_kI(0, slot0Cfg.kI, 100);
                     m_Talon->Config_kD(0, slot0Cfg.kD, 100);
@@ -134,7 +134,7 @@ namespace CowMotor
                 {
                     // motion magic accel and velocity
                     // config also contains Jerk which is unsued here
-                    ctre::phoenixpro::configs::MotionMagicConfigs mmCfg = std::get<ctre::phoenixpro::configs::MotionMagicConfigs>(config);
+                    ctre::phoenix6::configs::MotionMagicConfigs mmCfg = std::get<ctre::phoenix6::configs::MotionMagicConfigs>(config);
                     m_Talon->ConfigMotionAcceleration(mmCfg.MotionMagicAcceleration, 100);
                     m_Talon->ConfigMotionCruiseVelocity(mmCfg.MotionMagicCruiseVelocity, 100);
                     break;

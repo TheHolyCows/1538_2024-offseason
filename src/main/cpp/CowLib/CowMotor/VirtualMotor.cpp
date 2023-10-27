@@ -54,10 +54,10 @@ namespace CowMotor
         m_OverrideBrakeMode = overrideBrakeMode;
     }
     
-    void VirtualMotor::ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                                      ctre::phoenixpro::configs::Slot0Configs,
-                                                      ctre::phoenixpro::configs::MotionMagicConfigs,
-                                                      ctre::phoenixpro::configs::MotorOutputConfigs> config)
+    void VirtualMotor::ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                                      ctre::phoenix6::configs::Slot0Configs,
+                                                      ctre::phoenix6::configs::MotionMagicConfigs,
+                                                      ctre::phoenix6::configs::MotorOutputConfigs> config)
     {
         return;
     }

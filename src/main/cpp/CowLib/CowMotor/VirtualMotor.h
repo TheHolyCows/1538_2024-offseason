@@ -41,10 +41,10 @@ namespace CowMotor
         /* configuration */
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);
-        void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                              ctre::phoenixpro::configs::Slot0Configs,
-                                              ctre::phoenixpro::configs::MotionMagicConfigs,
-                                              ctre::phoenixpro::configs::MotorOutputConfigs> config);
+        void ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                              ctre::phoenix6::configs::Slot0Configs,
+                                              ctre::phoenix6::configs::MotionMagicConfigs,
+                                              ctre::phoenix6::configs::MotorOutputConfigs> config);
 
         /* getters */
         double GetPosition();

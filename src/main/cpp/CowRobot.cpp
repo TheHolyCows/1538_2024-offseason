@@ -34,6 +34,11 @@ CowRobot::CowRobot()
     //    SwerveDrive::ModuleConstants{ 2, 1, 25, CONSTANT("SWERVE_BL_ENCODER_OFFSET") },
     //    SwerveDrive::ModuleConstants{ 8, 7, 28, BR
 
+    for (;;)
+    {
+        printf("testing\n");
+    }
+
     m_Drivetrain = new SwerveDrive(swerveModuleConstants, CONSTANT("WHEEL_BASE"));
 
     m_Drivetrain->ResetEncoders();

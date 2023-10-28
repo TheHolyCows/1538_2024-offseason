@@ -40,7 +40,7 @@ void MaintainVelocityCommand::Finish(CowRobot *robot)
 {
     if (m_Stop)
     {
-        robot->GetDrivetrain()->SetVelocity(0, 0, 0, true);
+        // robot->GetDrivetrain()->SetVelocity(0, 0, 0, true);
     }
 
     m_Timer->Stop();

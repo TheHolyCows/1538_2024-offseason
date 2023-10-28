@@ -24,6 +24,12 @@ CowRobot::CowRobot()
 
     // TODO: initialize the SwerveDrive
 
+SwerveDrive::ModuleConstants swerveModuleConstants[4]{
+{2, 1, 25, 0},
+{4, 3, 26, 0},
+{6, 5, 27, 0},
+{8, 7, 28, 0}
+};
 
     // TODO: intitialize the SwerveDriveController
 

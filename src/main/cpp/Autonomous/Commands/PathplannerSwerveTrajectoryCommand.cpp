@@ -61,7 +61,7 @@ void PathplannerSwerveTrajectoryCommand::Start(CowRobot *robot)
 {
     if (m_ResetOdometry)
     {
-        robot->GetDrivetrain()->ResetOdometry(m_Trajectory.getInitialHolonomicPose());
+        // robot->GetDrivetrain()->ResetOdometry(m_Trajectory.getInitialHolonomicPose());
 
         // auto initPose = m_Trajectory.InitialPose();
         // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG,
@@ -99,13 +99,13 @@ void PathplannerSwerveTrajectoryCommand::Handle(CowRobot *robot)
         }
     }
 
-    frc::Pose2d currentPose = robot->GetDrivetrain()->GetPose();
+    // frc::Pose2d currentPose = robot->GetDrivetrain()->GetPose();
 
     pathplanner::PathPlannerTrajectory::PathPlannerState targetState
         = m_Trajectory.sample(units::second_t{ m_Timer->Get() });
 
-    CowLib::CowChassisSpeeds chassisSpeeds
-        = CowLib::CowChassisSpeeds::FromWPI(m_HolonomicController->calculate(currentPose, targetState));
+    // CowLib::CowChassisSpeeds chassisSpeeds
+    //     = CowLib::CowChassisSpeeds::FromWPI(m_HolonomicController->calculate(currentPose, targetState));
     // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG,
     //                           "vx: %f, vy: %f, o: %f",
     //                           chassisSpeeds.vx,
@@ -133,7 +133,7 @@ void PathplannerSwerveTrajectoryCommand::Handle(CowRobot *robot)
     // frc::SmartDashboard::PutNumber("auto/swerve/target/rotation",
     //                                targetState.asWPILibState().pose.Rotation().Degrees().value());
 
-    robot->GetDrivetrain()->SetVelocity(chassisSpeeds, false);
+    // robot->GetDrivetrain()->SetVelocity(chassisSpeeds, false);
 }
 
 void PathplannerSwerveTrajectoryCommand::Finish(CowRobot *robot)
@@ -141,7 +141,7 @@ void PathplannerSwerveTrajectoryCommand::Finish(CowRobot *robot)
     if (m_Stop)
     {
         CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG, "Stopping swerve trajectory command");
-        robot->GetDrivetrain()->SetVelocity(0, 0, 0, true);
+        // robot->GetDrivetrain()->SetVelocity(0, 0, 0, true);
     }
 
     for (Event event : m_Events)

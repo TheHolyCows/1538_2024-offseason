@@ -16,7 +16,7 @@
 #include "CowPigeon.h"
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
-
+#include "Drivetrain/SwerveDrive.h"
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>
 #include <frc/PowerDistribution.h>
@@ -71,7 +71,7 @@ public:
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
     // TODO: return the drivetrain
-    // SwerveDrive *GetDrivetrain() { return NULL; }
+    SwerveDrive *GetDrivetrain() { return NULL; }
 
     // TODO: return the drive controller
     // SwerveDriveController *GetDriveController() { return NULL; }

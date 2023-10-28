@@ -137,4 +137,10 @@ void CowRobot::StartTime()
 void CowRobot::DoNothing()
 {
     // TODO: make the robot stop (including drive)
+for (int i = 0; i < 3; i++){
+    //Testing loop
+    std::cout << "testing\n";
 }
+
+}
+

@@ -39,7 +39,14 @@ CowRobot::CowRobot()
     m_Drivetrain->ResetEncoders();
 
     m_DriveController = new SwerveDriveController(*m_Drivetrain);
+
+       for (int i =0; i <10; i++)
+    {
+        printf("hello");
+    }
 }
+
+
 
 /**
  * @brief reset drivetrain encoders and gyro

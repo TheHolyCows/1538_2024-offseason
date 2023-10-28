@@ -35,6 +35,12 @@ CowRobot::CowRobot()
     m_Drivetrain->ResetEncoders();
 
     m_DriveController = new SwerveDriveController(*m_Drivetrain);
+
+   //put stuff here 
+   for (int i = 0; i < 5; i++) 
+  cout << i << "\n";
+
+
 }
 
 /**

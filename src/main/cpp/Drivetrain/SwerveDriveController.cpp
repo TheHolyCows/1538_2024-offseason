@@ -1,5 +1,10 @@
 #include "SwerveDriveController.h"
 
+/**
+ * @brief Construct a new Swerve Drive Controller:: Swerve Drive Controller object
+ * 
+ * @param drivetrain - reference to a SwerveDrive pointer
+ */
 SwerveDriveController::SwerveDriveController(SwerveDrive &drivetrain)
     : m_Drivetrain(drivetrain),
       m_Gyro(*CowPigeon::GetInstance()),

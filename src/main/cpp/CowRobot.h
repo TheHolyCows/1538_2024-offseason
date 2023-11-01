@@ -17,6 +17,11 @@
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
 
+// delete
+#include "Drivetrain/SwerveDrive.h"
+#include "Drivetrain/SwerveDriveController.h"
+
+
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>
 #include <frc/PowerDistribution.h>
@@ -26,7 +31,8 @@
 class CowRobot
 {
 public:
-//
+
+    // TODO: add drivetrain member variable
 
 private:
 
@@ -71,10 +77,10 @@ public:
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
     // TODO: return the drivetrain
-    // SwerveDrive *GetDrivetrain() { return NULL; }
+    SwerveDrive *GetDrivetrain() { return NULL; }
 
     // TODO: return the drive controller
-    // SwerveDriveController *GetDriveController() { return NULL; }
+    SwerveDriveController *GetDriveController() { return NULL; }
 
     void Handle();
 

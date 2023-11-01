@@ -11,8 +11,8 @@ void OperatorController::Handle(CowRobot *bot)
     // X mode for wheels
     if (m_CB->GetDriveAxis(2) > 0.8 && m_CB->GetDriveAxis(6) > 0.8)
     {
-        bot->GetDrivetrain()->SetLocked(true);
-        bot->GetDrivetrain()->SetVelocity(0, 0, 0);
+        // bot->GetDrivetrain()->SetLocked(true);
+        // bot->GetDrivetrain()->SetVelocity(0, 0, 0);
     }
     else
     {

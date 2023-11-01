@@ -215,16 +215,16 @@ namespace CowMotor
 
     void PhoenixV5TalonFX::SetPID(double p, double i, double d, double f)
     {
-        m_Talon->Config_kP(0, p, 100);
-        m_Talon->Config_kI(0, i, 100);
-        m_Talon->Config_kD(0, d, 100);
-        m_Talon->Config_kF(0, f, 100);
+        m_Talon->Config_kP(0, p, 0);
+        m_Talon->Config_kI(0, i, 0);
+        m_Talon->Config_kD(0, d, 0);
+        m_Talon->Config_kF(0, f, 0);
     }
 
     void PhoenixV5TalonFX::SetMotionMagic(double velocity, double acceleration)
     {
-        m_Talon->ConfigMotionAcceleration(acceleration,100);
-        m_Talon->ConfigMotionCruiseVelocity(velocity,100);
+        m_Talon->ConfigMotionAcceleration(acceleration,0);
+        m_Talon->ConfigMotionCruiseVelocity(velocity,0);
     }
 
     void PhoenixV5TalonFX::SetInverted(bool inverted)

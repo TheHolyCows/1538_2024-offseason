@@ -11,7 +11,7 @@
 #include "../CowLib/Swerve/CowSwerveModuleState.h"
 #include "SwerveModuleInterface.h"
 
-#include <ctre/phoenixpro/TalonFX.hpp>
+#include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/DataLogManager.h>
 #include <frc/geometry/Rotation2d.h>

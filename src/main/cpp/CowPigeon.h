@@ -1,7 +1,7 @@
 #ifndef __COW_PIGEON_H__
 #define __COW_PIGEON_H__
 
-#include <ctre/phoenixpro/Pigeon2.hpp>
+#include <ctre/phoenix6/Pigeon2.hpp>
 
 class CowPigeon
 {
@@ -11,7 +11,7 @@ private:
     CowPigeon();
     ~CowPigeon() = default;
 
-    ctre::phoenixpro::hardware::Pigeon2 *m_Pigeon;
+    ctre::phoenix6::hardware::Pigeon2 *m_Pigeon;
 
     bool m_Inverted;
 

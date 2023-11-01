@@ -7,10 +7,10 @@ namespace CowLib
     /// @param deviceId
     CowCANCoder::CowCANCoder(int deviceId)
     {
-        m_Cancoder = new ctre::phoenixpro::hardware::CANcoder(deviceId, "cowdrive");
+        m_Cancoder = new ctre::phoenix6::hardware::CANcoder(deviceId, "cowdrive");
 
         // Default config
-        m_Config = ctre::phoenixpro::configs::CANcoderConfiguration{};
+        m_Config = ctre::phoenix6::configs::CANcoderConfiguration{};
         ApplyConfig();
 
         // This is what 1678 uses for swerve so okay
@@ -33,8 +33,8 @@ namespace CowLib
     void CowCANCoder::SetInverted(bool isInverted)
     {
         m_Config.MagnetSensor.SensorDirection
-            = isInverted ? ctre::phoenixpro::signals::SensorDirectionValue::Clockwise_Positive
-                         : ctre::phoenixpro::signals::SensorDirectionValue::CounterClockwise_Positive;
+            = isInverted ? ctre::phoenix6::signals::SensorDirectionValue::Clockwise_Positive
+                         : ctre::phoenix6::signals::SensorDirectionValue::CounterClockwise_Positive;
     }
 
     /// @brief Sets whether the output is signed [-180, 180] or unsigned [0, 360]
@@ -43,8 +43,8 @@ namespace CowLib
     {
         // auto conf = m_Cancoder->GetConfigurator();
         m_Config.MagnetSensor.AbsoluteSensorRange
-            = isSigned ? ctre::phoenixpro::signals::AbsoluteSensorRangeValue::Signed_PlusMinusHalf
-                       : ctre::phoenixpro::signals::AbsoluteSensorRangeValue::Unsigned_0To1;
+            = isSigned ? ctre::phoenix6::signals::AbsoluteSensorRangeValue::Signed_PlusMinusHalf
+                       : ctre::phoenix6::signals::AbsoluteSensorRangeValue::Unsigned_0To1;
 
         ApplyConfig();
     }
@@ -73,7 +73,7 @@ namespace CowLib
 
     /// @brief Gets internal CANCoder
     /// @return Pointer to internal CANCoder
-    ctre::phoenixpro::hardware::CANcoder *CowCANCoder::GetInternalCANCoder()
+    ctre::phoenix6::hardware::CANcoder *CowCANCoder::GetInternalCANCoder()
     {
         return m_Cancoder;
     }

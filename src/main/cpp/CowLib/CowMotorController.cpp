@@ -12,7 +12,7 @@ namespace CowLib
      */
     CowMotorController::CowMotorController(int id, CowMotor::MotorType motorType, std::string bus)
     { 
-        InitializeInternalMotor(id, CowMotor::PHOENIX_PRO, bus);
+        InitializeInternalMotor(id, motorType, bus);
 
         CowLogger::GetInstance()->RegisterMotor(id, this);
     }
@@ -28,7 +28,7 @@ namespace CowLib
         switch (motorType)
         {
             case CowMotor::PHOENIX_PRO:
-                m_GenericMotor = new CowMotor::PhoenixProTalonFX(id,bus);
+                // m_GenericMotor = new CowMotor::PhoenixProTalonFX(id,bus);
                 break;
             case CowMotor::PHOENIX_V5:
                 m_GenericMotor = new CowMotor::PhoenixV5TalonFX(id,bus);
@@ -101,10 +101,10 @@ namespace CowLib
      * please ensure that any changes to the ordering of the variant is reflected in the ConfigRequestEn enum
      * in CowMotorUtils.h to ensure this function works with Phoenix v5 motors
      */
-    void CowMotorController::ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                                      ctre::phoenixpro::configs::Slot0Configs,
-                                                      ctre::phoenixpro::configs::MotionMagicConfigs,
-                                                      ctre::phoenixpro::configs::MotorOutputConfigs> config)
+    void CowMotorController::ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                                      ctre::phoenix6::configs::Slot0Configs,
+                                                      ctre::phoenix6::configs::MotionMagicConfigs,
+                                                      ctre::phoenix6::configs::MotorOutputConfigs> config)
     {
         m_GenericMotor->ApplyConfig(config);
     }
@@ -207,7 +207,7 @@ namespace CowLib
         m_GenericMotor->SetReversed(reversed);
     }
 
-    // ctre::phoenixpro::hardware::TalonFX *CowMotorController::GetInternalTalon()
+    // ctre::phoenix6::hardware::TalonFX *CowMotorController::GetInternalTalon()
     // {
     //     return m_Talon;
     // }

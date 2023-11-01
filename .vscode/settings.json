@@ -99,6 +99,7 @@
     "span": "cpp",
     "sstream": "cpp",
     "cinttypes": "cpp",
-    "typeindex": "cpp"
+    "typeindex": "cpp",
+    "*.inc": "cpp"
   }
 }

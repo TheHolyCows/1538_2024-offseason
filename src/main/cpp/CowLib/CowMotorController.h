@@ -7,11 +7,10 @@
 
 #include "CowMotor/CowMotorUtils.h"
 #include "CowMotor/GenericCowMotor.h"
-#include "CowMotor/PhoenixProTalonFX.h"
+// #include "CowMotor/PhoenixProTalonFX.h"
 #include "CowMotor/PhoenixV6TalonFX.h"
 #include "CowMotor/PhoenixV5TalonFX.h"
 
-#include <ctre/phoenixpro/TalonFX.hpp>
 #include <variant>
 
 namespace CowLib
@@ -19,7 +18,7 @@ namespace CowLib
     class CowMotorController
     {
     private:
-        ctre::phoenixpro::hardware::TalonFX *m_Talon;
+        ctre::phoenix6::hardware::TalonFX *m_Talon;
         double m_Setpoint;
         bool m_UseFOC;
         bool m_OverrideBrakeMode;
@@ -35,7 +34,7 @@ namespace CowLib
 
             double GetSetpoint() { return PercentOut; }
 
-            ctre::phoenixpro::controls::DutyCycleOut ToControlRequest() { return { PercentOut }; }
+            ctre::phoenix6::controls::DutyCycleOut ToControlRequest() { return { PercentOut }; }
         };
 
         struct VoltageOutput
@@ -45,7 +44,7 @@ namespace CowLib
 
             double GetSetpoint() { return Voltage; }
 
-            ctre::phoenixpro::controls::VoltageOut ToControlRequest() { return { units::volt_t{ Voltage } }; }
+            ctre::phoenix6::controls::VoltageOut ToControlRequest() { return { units::volt_t{ Voltage } }; }
         };
 
         struct TorqueCurrentOutput
@@ -61,7 +60,7 @@ namespace CowLib
 
             double GetSetpoint() { return Current; }
 
-            ctre::phoenixpro::controls::TorqueCurrentFOC ToControlRequest()
+            ctre::phoenix6::controls::TorqueCurrentFOC ToControlRequest()
             {
                 return { units::ampere_t{ Current }, MaxOutput, units::ampere_t{ Deadband }, false };
             }
@@ -77,7 +76,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::PositionDutyCycle ToControlRequest()
+            ctre::phoenix6::controls::PositionDutyCycle ToControlRequest()
             {
                 return { units::turn_t{ Position }, true, FeedForward, 0, false };
             }
@@ -93,7 +92,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::PositionVoltage ToControlRequest()
+            ctre::phoenix6::controls::PositionVoltage ToControlRequest()
             {
                 return { units::turn_t{ Position }, true, units::volt_t{ FeedForward }, 0, false };
             }
@@ -109,7 +108,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::PositionTorqueCurrentFOC ToControlRequest()
+            ctre::phoenix6::controls::PositionTorqueCurrentFOC ToControlRequest()
             {
                 return { units::turn_t{ Position }, units::ampere_t{ FeedForward }, 0, false };
             }
@@ -125,7 +124,7 @@ namespace CowLib
 
             double GetSetpoint() { return Velocity; }
 
-            ctre::phoenixpro::controls::VelocityDutyCycle ToControlRequest()
+            ctre::phoenix6::controls::VelocityDutyCycle ToControlRequest()
             {
                 return { units::turns_per_second_t{ Velocity }, true, FeedForward, 0, false };
             }
@@ -141,7 +140,7 @@ namespace CowLib
 
             double GetSetpoint() { return Velocity; }
 
-            ctre::phoenixpro::controls::VelocityVoltage ToControlRequest()
+            ctre::phoenix6::controls::VelocityVoltage ToControlRequest()
             {
                 return { units::turns_per_second_t{ Velocity }, true, units::volt_t{ FeedForward }, 0, false };
             }
@@ -157,7 +156,7 @@ namespace CowLib
 
             double GetSetpoint() { return Velocity; }
 
-            ctre::phoenixpro::controls::VelocityTorqueCurrentFOC ToControlRequest()
+            ctre::phoenix6::controls::VelocityTorqueCurrentFOC ToControlRequest()
             {
                 return { units::turns_per_second_t{ Velocity }, units::ampere_t{ FeedForward }, 0, false };
             }
@@ -173,7 +172,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::MotionMagicDutyCycle ToControlRequest()
+            ctre::phoenix6::controls::MotionMagicDutyCycle ToControlRequest()
             {
                 return { units::turn_t{ Position }, true, FeedForward, 0, false };
             }
@@ -189,7 +188,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::MotionMagicVoltage ToControlRequest()
+            ctre::phoenix6::controls::MotionMagicVoltage ToControlRequest()
             {
                 return { units::turn_t{ Position }, true, units::volt_t{ FeedForward }, 0, false };
             }
@@ -205,7 +204,7 @@ namespace CowLib
 
             double GetSetpoint() { return Position; }
 
-            ctre::phoenixpro::controls::MotionMagicTorqueCurrentFOC ToControlRequest()
+            ctre::phoenix6::controls::MotionMagicTorqueCurrentFOC ToControlRequest()
             {
                 return { units::turn_t{ Position }, FeedForward, 0, false };
             }
@@ -219,7 +218,7 @@ namespace CowLib
             // Whether to invert the motor against the leader
             bool Invert = false;
 
-            ctre::phoenixpro::controls::Follower ToControlRequest() { return { LeaderID, Invert }; }
+            ctre::phoenix6::controls::Follower ToControlRequest() { return { LeaderID, Invert }; }
         };
 
         enum NeutralMode
@@ -250,10 +249,10 @@ namespace CowLib
         /* configuration */
         void UseFOC(bool useFOC);
         void OverrideBrakeMode(bool overrideBrakeMode);
-        void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                      ctre::phoenixpro::configs::Slot0Configs,
-                                      ctre::phoenixpro::configs::MotionMagicConfigs,
-                                      ctre::phoenixpro::configs::MotorOutputConfigs> config);
+        void ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                      ctre::phoenix6::configs::Slot0Configs,
+                                      ctre::phoenix6::configs::MotionMagicConfigs,
+                                      ctre::phoenix6::configs::MotorOutputConfigs> config);
 
         /* getters */
         double GetSetpoint();
@@ -272,7 +271,7 @@ namespace CowLib
         void SetReversed(bool reversed);
 
         // not necessary?
-        // ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
+        // ctre::phoenix6::hardware::TalonFX *GetInternalTalon();
 
         /* logging */
         void GetPIDData(double *setpoint, double *procVar, double *P, double *I, double *D);

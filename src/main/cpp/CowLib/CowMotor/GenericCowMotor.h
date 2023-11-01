@@ -9,7 +9,7 @@
 
 #include <string>
 #include <variant>
-#include <ctre/phoenixpro/TalonFX.hpp>
+#include <ctre/phoenix6/TalonFX.hpp>
 
 namespace CowMotor
 {   
@@ -44,10 +44,10 @@ namespace CowMotor
         /* configuration */
         virtual void UseFOC(bool useFOC) = 0;
         virtual void OverrideBrakeMode(bool overrideBrakeMode) = 0;
-        virtual void ApplyConfig(std::variant<ctre::phoenixpro::configs::TalonFXConfiguration,
-                                              ctre::phoenixpro::configs::Slot0Configs,
-                                              ctre::phoenixpro::configs::MotionMagicConfigs,
-                                              ctre::phoenixpro::configs::MotorOutputConfigs> config) = 0;
+        virtual void ApplyConfig(std::variant<ctre::phoenix6::configs::TalonFXConfiguration,
+                                              ctre::phoenix6::configs::Slot0Configs,
+                                              ctre::phoenix6::configs::MotionMagicConfigs,
+                                              ctre::phoenix6::configs::MotorOutputConfigs> config) = 0;
 
         /* getters */
         virtual double GetSetpoint() = 0;
@@ -67,6 +67,6 @@ namespace CowMotor
         virtual void SetInverted(bool inverted) = 0;
         virtual void SetReversed(bool reversed) = 0;
 
-        // ctre::phoenixpro::hardware::TalonFX *GetInternalTalon();
+        // ctre::phoenix6::hardware::TalonFX *GetInternalTalon();
     };
 }

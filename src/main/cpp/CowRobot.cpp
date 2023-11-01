@@ -19,10 +19,13 @@ CowRobot::CowRobot()
     // m_Gyro->Reset(); - don't know why we have this commented
     m_Accelerometer = new frc::BuiltInAccelerometer(frc::Accelerometer::kRange_4G);
 
+
     // TODO: initialize ModuleConstants
     
 
+
     // TODO: initialize the SwerveDrive
+
 
 
     // TODO: intitialize the SwerveDriveController

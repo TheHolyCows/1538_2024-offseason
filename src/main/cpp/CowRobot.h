@@ -4,7 +4,7 @@
 
 #ifndef __COW_ROBOT_H__
 #define __COW_ROBOT_H__
-
+#include "Drivetrain/SwerveDrive.h"
 #include "Controllers/GenericController.h"
 #include "CowConstants.h"
 #include "CowLib/CowAlphaNum.h"
@@ -35,7 +35,7 @@ private:
 
     // TODO: add drivetrain member variable
 
-
+SwerveDrive *m_Drivetrain;
 
     // gyro and accelerometers
     CowPigeon *m_Gyro;

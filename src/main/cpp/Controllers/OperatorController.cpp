@@ -32,6 +32,11 @@ void OperatorController::Handle(CowRobot *bot)
         // TODO: standard drive code here
         // we can get the drive axis of the control board through the m_CB object
         // we should drive through the use of the drive controller object in CowRobot
+        bot->GetDriveController()->Drive(
+            m_CB->GetLeftDriveStickY
+            m_CB->GetLeftDriveStickX
+            m_CB->GetRightDriveStickY
+            true);
         
     }
 }

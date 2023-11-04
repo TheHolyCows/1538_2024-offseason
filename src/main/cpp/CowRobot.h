@@ -16,6 +16,7 @@
 #include "CowPigeon.h"
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
+#include "Driverain/SwerveDrive.h"
 
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>
@@ -34,7 +35,8 @@ private:
     GenericController *m_Controller = nullptr;
 
     // TODO: add drivetrain member variable
-
+    SwerveDrive *m_Drivetrain; 
+     
 
 
     // gyro and accelerometers

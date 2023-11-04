@@ -17,6 +17,9 @@
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
 
+#include "Drivetrain/SwerveDrive.h"
+#include "Drivetrain/SwerveDriveController.h"
+
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>
 #include <frc/PowerDistribution.h>
@@ -34,7 +37,8 @@ private:
     GenericController *m_Controller = nullptr;
 
     // TODO: add drivetrain member variable
-
+    SwerveDrive *m_Drivetrain;
+    SwerveDriveController *m_DriveController;
 
 
     // gyro and accelerometers
@@ -73,9 +77,10 @@ public:
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
     // TODO: return the drivetrain
-    SwerveDrive *GetDrivetrain() { return NULL; }
+    SwerveDrive *GetDrivetrain() { return m_Drivetrain; }
 
     // TODO: return the drive controller
+    SwerveDriveController *GetDriveController() { return m_DriveController; };
 
 
     void Handle();

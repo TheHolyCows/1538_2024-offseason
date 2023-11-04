@@ -73,10 +73,10 @@ public:
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
     // TODO: return the drivetrain
-    SwerveDrive *GetDrivetrain() { return NULL; }
+    SwerveDrive *GetDrivetrain() { return m_Drivetrain; }
 
-    // TODO: return the drive controller
-
+    // TODO: return the drive controller 
+SweveDriveController *GetDriveController() {return m_DriveController; };
 
     void Handle();
 

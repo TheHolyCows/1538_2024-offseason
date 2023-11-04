@@ -17,6 +17,8 @@
 #include "frc/controller/PIDController.h"
 #include "Subsystems/Vision.h"
 
+#include "Drivetrain/SwerveDrive.h"
+
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>
 #include <frc/PowerDistribution.h>

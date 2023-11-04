@@ -78,7 +78,7 @@ public:
     SwerveDrive *GetDrivetrain() { return m_Drivetrain; }
 
     // TODO: return the drive controller
-
+    SwerveDriveController *GetDriveController() { return m_DriveController; };
 
     void Handle();
 

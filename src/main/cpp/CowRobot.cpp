@@ -25,11 +25,11 @@ CowRobot::CowRobot()
 
 
     // TODO: initialize the SwerveDrive
-m_Drivetrain = new SwerveDrive(swerveModuleConstants, 1.5625); 
+    m_Drivetrain = new SwerveDrive(swerveModuleConstants, 1.5625); 
 
 
     // TODO: intitialize the SwerveDriveController
-
+    m_Drivetrain = new SwerveDriveController(*m_Drivetrain); 
 
 }
 

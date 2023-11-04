@@ -20,16 +20,28 @@ CowRobot::CowRobot()
     m_Accelerometer = new frc::BuiltInAccelerometer(frc::Accelerometer::kRange_4G);
 
 
-    // TODO: initialize ModuleConstants
-    
+  // TODO: initialize ModuleConstants  
+ // frontLeft, frontRight, backLeft, backRight
+// driveMotorID, turningMotorID, encoderCanId, moduleOffset
+// assume motor IDs are FL:(2,1), FR:(4,3), BL:(6,5), BR:(8,7)
+// assume encoderIds are 25, 26, 27, 28 respectively
+// assume module offset is 46.934, 28.125, 7.910, and 241.436 respectively
+SwerveDrive::ModuleConstants swerveModuleConstants[4]{
+    {2,1,25,46.934}
+    {4,3,26,28.125},
+    {6,5,27,7.91028},
+    {8,7,28,241.436},
+  };
 
 
     // TODO: initialize the SwerveDrive
+    m_Drivetrain = new SwerveDrive(swervemoduleconsents, 1.5625);
 
-
-
+    // TODO: return the drivetrain
+SwerveDrive *GetDrivetrain() { return NULL; }
+  
     // TODO: intitialize the SwerveDriveController
-
+m_D
 
 }
 

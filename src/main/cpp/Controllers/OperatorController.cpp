@@ -35,7 +35,7 @@ void OperatorController::Handle(CowRobot *bot)
         bot->GtetDriveController()->Drive(
             m_CB->GetLeftDriveStickY(),
             m_CB->GetLeftDriveStickX(),
-            m_CB->GetRightDriveStickY(),
+            m_CB->GetRightDriveStickX() * -1
             true);
         
     }

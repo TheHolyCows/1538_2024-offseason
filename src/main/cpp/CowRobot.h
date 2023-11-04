@@ -5,6 +5,8 @@
 #ifndef __COW_ROBOT_H__
 #define __COW_ROBOT_H__
 
+#include "SwerveDriveController.h
+#include "Drivetrain/SwerveDrive.h"
 #include "Controllers/GenericController.h"
 #include "CowConstants.h"
 #include "CowLib/CowAlphaNum.h"
@@ -34,7 +36,7 @@ private:
     GenericController *m_Controller = nullptr;
 
     // TODO: add drivetrain member variable
-
+    SwerveDrive * m_Drivetrain;
 
 
     // gyro and accelerometers
@@ -73,10 +75,10 @@ public:
     CowPigeon *GetGyro() { return CowPigeon::GetInstance(); }
 
     // TODO: return the drivetrain
-    SwerveDrive *GetDrivetrain() { return NULL; }
+    SwerveDrive *GetDrivetrain() {return m_Drivetrain; }
 
     // TODO: return the drive controller
-
+    SwerveDriveController *GetDriveController() {return m_DriveController;};
 
     void Handle();
 

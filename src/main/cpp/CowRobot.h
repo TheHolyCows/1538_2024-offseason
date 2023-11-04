@@ -18,6 +18,7 @@
 #include "Subsystems/Vision.h"
 
 #include "Drivetrain/SwerveDrive.h"
+#include "Drivetrain/SwerveDriveController.h"
 
 #include <frc/BuiltInAccelerometer.h>
 #include <frc/filter/LinearFilter.h>

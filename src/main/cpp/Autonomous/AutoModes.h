@@ -28,6 +28,7 @@ private:
     static AutoModes *s_Instance;
 
     std::map<std::string, std::deque<RobotCommand *>> m_Modes;
+    
     std::map<std::string, std::deque<RobotCommand *>>::iterator m_Iterator;
 
 public:

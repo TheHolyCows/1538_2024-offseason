@@ -56,16 +56,19 @@ void CowBase::AutonomousInit()
 
     m_Bot->GetDrivetrain()->SetBrakeMode(true);
 
-    m_AutoController->SetCommandList(AutoModes::GetInstance()->GetCommandList());
-    std::cout << "Done setting command list" << std::endl;
+    if (AutoModes::GetInstance()->GetCommandList().size() > 0)
+    {
+        m_AutoController->SetCommandList(AutoModes::GetInstance()->GetCommandList());
+        std::cout << "Done setting command list" << std::endl;
 
-    AutoModes::GetInstance()->NextMode();
+        AutoModes::GetInstance()->NextMode();
 
-    m_Bot->SetController(m_AutoController);
-    m_Bot->Reset();
+        m_Bot->SetController(m_AutoController);
+        m_Bot->Reset();
 
-    CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG, "start auto mode");
-    m_AutoController->Start(m_Bot);
+        CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG, "start auto mode");
+        m_AutoController->Start(m_Bot);
+    }
 }
 
 void CowBase::TeleopInit()
@@ -100,16 +103,19 @@ void CowBase::DisabledPeriodic()
     //     m_Bot->Reset();
     // }
 
-    // if (m_ControlBoard->GetAutoSelectButton())
-    // {
-    //     /*
-    //      * POSITION FIRST_OWNERSHIP SECOND_OWNERSHIP DRIVE
-    //      * iterates over AutoModes
-    //      */
-    //     AutoModes::GetInstance()->NextMode();
-    //     CowLib::CowLogger::LogAutoMode(m_Alliance, AutoModes::GetInstance()->GetName().c_str());
-    //     printf("%s\n", AutoModes::GetInstance()->GetName().c_str());
-    // }
+    if (m_ControlBoard->GetAutoSelectButton())
+    {
+        /*
+         * POSITION FIRST_OWNERSHIP SECOND_OWNERSHIP DRIVE
+         * iterates over AutoModes
+         */
+        if (AutoModes::GetInstance()->GetCommandList().size() > 0)
+        {
+            AutoModes::GetInstance()->NextMode();
+            CowLib::CowLogger::LogAutoMode(m_Alliance, AutoModes::GetInstance()->GetName().c_str());
+            printf("%s\n", AutoModes::GetInstance()->GetName().c_str());
+        }
+    }
 
     if (m_Bot)
     {
@@ -119,8 +125,8 @@ void CowBase::DisabledPeriodic()
 
     if (m_DisabledCount++ % 35 == 0)
     {
-        // m_Alliance = frc::DriverStation::GetAlliance();
-        // CowLib::CowLogger::LogAutoMode(m_Alliance, AutoModes::GetInstance()->GetName().c_str());
+        m_Alliance = frc::DriverStation::GetAlliance();
+        CowLib::CowLogger::LogAutoMode(m_Alliance, AutoModes::GetInstance()->GetName().c_str());
         m_DisabledCount = 1;
     }
 }

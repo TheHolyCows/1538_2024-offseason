@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
-#include <pathplanner/lib/PathPlanner.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
 #include <string>
 #include <vector>
 
@@ -43,7 +43,8 @@ public:
 private:
     CowLib::CowTimer *m_Timer;
 
-    pathplanner::PathPlannerTrajectory m_Trajectory;
+    // pathplanner::PathPlannerTrajectory m_Trajectory;
+    pathplanner::PathPlannerPath m_Path;
     pathplanner::PPHolonomicDriveController *m_HolonomicController;
 
     double m_TotalTime;

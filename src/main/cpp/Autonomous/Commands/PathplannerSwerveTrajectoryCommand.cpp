@@ -13,9 +13,11 @@ PathplannerSwerveTrajectoryCommand::PathplannerSwerveTrajectoryCommand(const std
     m_ResetOdometry = resetOdometry;
 
     // Load trajectory from file
-    m_Trajectory = pathplanner::PathPlanner::loadPath(trajectoryName,
-                                                      units::feet_per_second_t{ maxSpeed },
-                                                      units::feet_per_second_squared_t{ maxAccel });
+    // m_Trajectory = pathplanner::PathPlanner::loadPath(trajectoryName,
+    //                                                   units::feet_per_second_t{ maxSpeed },
+    //                                                   units::feet_per_second_squared_t{ maxAccel });
+
+    m_Path = pathplanner::PathPlannerPath::fromPathFile(trajectoryName);
 
     m_Trajectory
         = pathplanner::PathPlannerTrajectory::transformTrajectoryForAlliance(m_Trajectory,

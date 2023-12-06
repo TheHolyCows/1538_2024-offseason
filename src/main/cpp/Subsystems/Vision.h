@@ -15,7 +15,6 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/NetworkTableValue.h>
 #include <optional>
-#include <pathplanner/lib/PathPlanner.h>
 #include <units/length.h>
 #include <vector>
 #include "ArmState.h"

@@ -19,10 +19,6 @@ PathplannerSwerveTrajectoryCommand::PathplannerSwerveTrajectoryCommand(const std
 
     m_Path = pathplanner::PathPlannerPath::fromPathFile(trajectoryName);
 
-    m_Trajectory
-        = pathplanner::PathPlannerTrajectory::transformTrajectoryForAlliance(m_Trajectory,
-                                                                             frc::DriverStation::GetAlliance());
-
     // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG, "Loaded trajectory %s", trajectoryName.c_str());
 
     m_HolonomicController = new pathplanner::PPHolonomicDriveController(

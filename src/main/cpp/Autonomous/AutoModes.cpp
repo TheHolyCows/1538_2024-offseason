@@ -29,7 +29,8 @@ AutoModes::AutoModes()
     };
 
     /* TODO: add auto modes here */
-    
+    m_Modes ["module-3"].push_back(new PathplannerSwerveTrajectoryCommand("module3-1",2.5, 2.5 true, true));
+    m_Modes ["module-3"].push_back(new PathplannerSwerveTrajectoryCommand("module3-2",2.5, 2.5 true, false));
 
 
 

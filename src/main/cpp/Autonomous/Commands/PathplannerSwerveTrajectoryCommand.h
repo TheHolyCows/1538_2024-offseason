@@ -44,7 +44,7 @@ private:
     CowLib::CowTimer *m_Timer;
 
     // pathplanner::PathPlannerTrajectory m_Trajectory;
-    pathplanner::PathPlannerPath m_Path;
+    std::shared_ptr<pathplanner::PathPlannerPath> m_Path;
     pathplanner::PPHolonomicDriveController *m_HolonomicController;
 
     double m_TotalTime;

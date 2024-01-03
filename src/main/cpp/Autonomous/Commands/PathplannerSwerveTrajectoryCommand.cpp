@@ -12,42 +12,40 @@ PathplannerSwerveTrajectoryCommand::PathplannerSwerveTrajectoryCommand(const std
     m_Stop          = stopAtEnd;
     m_ResetOdometry = resetOdometry;
 
-    // Load trajectory from file
-    // m_Trajectory = pathplanner::PathPlanner::loadPath(trajectoryName,
-    //                                                   units::feet_per_second_t{ maxSpeed },
-    //                                                   units::feet_per_second_squared_t{ maxAccel });
-
     m_Path = pathplanner::PathPlannerPath::fromPathFile(trajectoryName);
 
     // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG, "Loaded trajectory %s", trajectoryName.c_str());
 
-    m_HolonomicController = new pathplanner::PPHolonomicDriveController(
-        frc2::PIDController{ CONSTANT("AUTO_DRIVE_P"), CONSTANT("AUTO_DRIVE_I"), CONSTANT("AUTO_DRIVE_D") },
-        frc2::PIDController{ CONSTANT("AUTO_DRIVE_P"), CONSTANT("AUTO_DRIVE_I"), CONSTANT("AUTO_DRIVE_D") },
-        frc2::PIDController{ CONSTANT("AUTO_ROTATION_P"), CONSTANT("AUTO_ROTATION_I"), CONSTANT("AUTO_ROTATION_D") });
+    // m_HolonomicController = new pathplanner::PPHolonomicDriveController(
+    //     frc::PIDController{ CONSTANT("AUTO_DRIVE_P"), CONSTANT("AUTO_DRIVE_I"), CONSTANT("AUTO_DRIVE_D") },
+    //     frc::PIDController{ CONSTANT("AUTO_DRIVE_P"), CONSTANT("AUTO_DRIVE_I"), CONSTANT("AUTO_DRIVE_D") },
+    //     frc::PIDController{ CONSTANT("AUTO_ROTATION_P"), CONSTANT("AUTO_ROTATION_I"), CONSTANT("AUTO_ROTATION_D") });
 
-    m_TotalTime = m_Trajectory.getTotalTime().value();
+    // m_TotalTime = m_Trajectory.getTotalTime().value();
 
-    m_Events = events;
+    // m_Events = events;
 
-    std::vector<pathplanner::PathPlannerTrajectory::EventMarker> markers = m_Trajectory.getMarkers();
+    // std::vector<pathplanner::PathPlannerTrajectory::EventMarker> markers = m_Trajectory.getMarkers();
 
-    for (Event event : m_Events)
-    {
-        for (pathplanner::PathPlannerTrajectory::EventMarker marker : markers)
-        {
-            if (std::find(marker.names.begin(), marker.names.end(), event.waypointName) != marker.names.end())
-            {
-                event.time = marker.time.value();
-            }
-        }
-    }
+    // for (Event event : m_Events)
+    // {
+    //     for (pathplanner::PathPlannerTrajectory::EventMarker marker : markers)
+    //     {
+    //         if (std::find(marker.names.begin(), marker.names.end(), event.waypointName) != marker.names.end())
+    //         {
+    //             event.time = marker.time.value();
+    //         }
+    //     }
+    // }
+
+    
+
 }
 
 PathplannerSwerveTrajectoryCommand::~PathplannerSwerveTrajectoryCommand()
 {
     delete m_Timer;
-    delete m_HolonomicController;
+    // delete m_HolonomicController;
 }
 
 bool PathplannerSwerveTrajectoryCommand::IsComplete(CowRobot *robot)
@@ -59,7 +57,7 @@ void PathplannerSwerveTrajectoryCommand::Start(CowRobot *robot)
 {
     if (m_ResetOdometry)
     {
-        robot->GetDrivetrain()->ResetOdometry(m_Trajectory.getInitialHolonomicPose());
+        // robot->GetDrivetrain()->ResetOdometry(m_Trajectory.getInitialHolonomicPose());
 
         // auto initPose = m_Trajectory.InitialPose();
         // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG,
@@ -99,11 +97,11 @@ void PathplannerSwerveTrajectoryCommand::Handle(CowRobot *robot)
 
     frc::Pose2d currentPose = robot->GetDrivetrain()->GetPose();
 
-    pathplanner::PathPlannerTrajectory::PathPlannerState targetState
-        = m_Trajectory.sample(units::second_t{ m_Timer->Get() });
+    // pathplanner::PathPlannerTrajectory::PathPlannerState targetState
+    //     = m_Trajectory.sample(units::second_t{ m_Timer->Get() });
 
-    CowLib::CowChassisSpeeds chassisSpeeds
-        = CowLib::CowChassisSpeeds::FromWPI(m_HolonomicController->calculate(currentPose, targetState));
+    // CowLib::CowChassisSpeeds chassisSpeeds
+    //     = CowLib::CowChassisSpeeds::FromWPI(m_HolonomicController->calculate(currentPose, targetState));
     // CowLib::CowLogger::LogMsg(CowLib::CowLogger::LOG_DBG,
     //                           "vx: %f, vy: %f, o: %f",
     //                           chassisSpeeds.vx,
@@ -131,7 +129,7 @@ void PathplannerSwerveTrajectoryCommand::Handle(CowRobot *robot)
     // frc::SmartDashboard::PutNumber("auto/swerve/target/rotation",
     //                                targetState.asWPILibState().pose.Rotation().Degrees().value());
 
-    robot->GetDrivetrain()->SetVelocity(chassisSpeeds, false);
+    // robot->GetDrivetrain()->SetVelocity(chassisSpeeds, false);
 }
 
 void PathplannerSwerveTrajectoryCommand::Finish(CowRobot *robot)
@@ -155,5 +153,6 @@ void PathplannerSwerveTrajectoryCommand::Finish(CowRobot *robot)
 
 frc::Pose2d PathplannerSwerveTrajectoryCommand::GetStartingPose()
 {
-    return m_Trajectory.getInitialHolonomicPose();
+    // return m_Trajectory.getInitialHolonomicPose();
+    return m_Path->getPreviewStartingHolonomicPose();
 }

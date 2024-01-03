@@ -20,9 +20,9 @@ class HoldPositionCommand : public RobotCommand
 private:
     CowLib::CowTimer *m_Timer;
 
-    frc2::PIDController *m_XController;
-    frc2::PIDController *m_YController;
-    frc2::PIDController *m_RotationController;
+    frc::PIDController *m_XController;
+    frc::PIDController *m_YController;
+    frc::PIDController *m_RotationController;
 
     double m_TotalTime;
     bool m_Stop;

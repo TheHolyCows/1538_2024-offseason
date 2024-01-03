@@ -43,7 +43,7 @@ private:
 
     // gyro and accelerometers
     CowPigeon *m_Gyro;
-    frc::Accelerometer *m_Accelerometer;
+    frc::BuiltInAccelerometer *m_Accelerometer;
     frc::LinearFilter<double> m_ZFilter = frc::LinearFilter<double>::MovingAverage(12);
     double m_PrevZ;
 

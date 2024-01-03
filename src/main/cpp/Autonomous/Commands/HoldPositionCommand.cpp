@@ -8,13 +8,13 @@ HoldPositionCommand::HoldPositionCommand(double time, double maxVelocity, bool s
     m_MaxVelocity   = maxVelocity;
     m_ResetOdometry = resetOdometry;
 
-    m_XController        = new frc2::PIDController(CONSTANT("AUTO_HOLD_DRIVE_P"),
+    m_XController        = new frc::PIDController(CONSTANT("AUTO_HOLD_DRIVE_P"),
                                             CONSTANT("AUTO_HOLD_DRIVE_I"),
                                             CONSTANT("AUTO_HOLD_DRIVE_D"));
-    m_YController        = new frc2::PIDController(CONSTANT("AUTO_HOLD_DRIVE_P"),
+    m_YController        = new frc::PIDController(CONSTANT("AUTO_HOLD_DRIVE_P"),
                                             CONSTANT("AUTO_HOLD_DRIVE_I"),
                                             CONSTANT("AUTO_HOLD_DRIVE_D"));
-    m_RotationController = new frc2::PIDController(CONSTANT("AUTO_HOLD_ROTATION_P"),
+    m_RotationController = new frc::PIDController(CONSTANT("AUTO_HOLD_ROTATION_P"),
                                                    CONSTANT("AUTO_HOLD_ROTATION_I"),
                                                    CONSTANT("AUTO_HOLD_ROTATION_D"));
 

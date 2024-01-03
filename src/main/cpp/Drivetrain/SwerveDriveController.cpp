@@ -115,48 +115,48 @@ void SwerveDriveController::LockHeading(double x, double y, bool useRawInputs)
     m_Drivetrain.SetVelocity(x, y, omega, true, 0, 0);
 }
 
-void SwerveDriveController::CubeAlign(double x)
-{
-    // Check if heading is aligned
-    if (fabs(fmod(m_Gyro.GetYawDegrees(), 180)) > CONSTANT("HEADING_TOLERANCE"))
-    {
-        // If not, run the heading lock function
-        LockHeading(x, 0);
-        return;
-    }
+// void SwerveDriveController::CubeAlign(double x)
+// {
+//     // Check if heading is aligned
+//     if (fabs(fmod(m_Gyro.GetYawDegrees(), 180)) > CONSTANT("HEADING_TOLERANCE"))
+//     {
+//         // If not, run the heading lock function
+//         LockHeading(x, 0);
+//         return;
+//     }
 
-    // Otherwise, continue with vision alignment
+//     // Otherwise, continue with vision alignment
 
-    double y = Vision::GetInstance()->CubeYPID();
+//     double y = Vision::GetInstance()->CubeYPID();
 
-    x = ProcessDriveAxis(x, CONSTANT("DESIRED_MAX_SPEED"), false);
+//     x = ProcessDriveAxis(x, CONSTANT("DESIRED_MAX_SPEED"), false);
 
-    m_Drivetrain.SetVelocity(x, y, 0, true, 0, 0, true);
-}
+//     m_Drivetrain.SetVelocity(x, y, 0, true, 0, 0, true);
+// }
 
-void SwerveDriveController::ConeAlign(double x, double yInput)
-{
-    // Check if heading is aligned
-    if (fabs(fmod(m_Gyro.GetYawDegrees(), 180)) > CONSTANT("HEADING_TOLERANCE"))
-    {
-        // If not, run the heading lock function
-        LockHeading(x, yInput);
-        return;
-    }
+// void SwerveDriveController::ConeAlign(double x, double yInput)
+// {
+//     // Check if heading is aligned
+//     if (fabs(fmod(m_Gyro.GetYawDegrees(), 180)) > CONSTANT("HEADING_TOLERANCE"))
+//     {
+//         // If not, run the heading lock function
+//         LockHeading(x, yInput);
+//         return;
+//     }
 
-    // Otherwise, continue with vision alignment
-    double y = Vision::GetInstance()->ConeYPID();
+//     // Otherwise, continue with vision alignment
+//     double y = Vision::GetInstance()->ConeYPID();
 
-    // Override if yInput is above override threshold
-    if (fabs(yInput) < CONSTANT("CONE_Y_OVERRIDE_THRESHOLD"))
-    {
-        y = ProcessDriveAxis(yInput, CONSTANT("DESIRED_MAX_SPEED"), false);
-    }
+//     // Override if yInput is above override threshold
+//     if (fabs(yInput) < CONSTANT("CONE_Y_OVERRIDE_THRESHOLD"))
+//     {
+//         y = ProcessDriveAxis(yInput, CONSTANT("DESIRED_MAX_SPEED"), false);
+//     }
 
-    x = ProcessDriveAxis(x, CONSTANT("DESIRED_MAX_SPEED"), false);
+//     x = ProcessDriveAxis(x, CONSTANT("DESIRED_MAX_SPEED"), false);
 
-    m_Drivetrain.SetVelocity(x, y, 0, true, 0, 0, true);
-}
+//     m_Drivetrain.SetVelocity(x, y, 0, true, 0, 0, true);
+// }
 
 void SwerveDriveController::ResetHeadingLock()
 {

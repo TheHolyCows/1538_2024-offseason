@@ -5,7 +5,7 @@
 #include "./RobotCommand.h"
 
 #include <iostream>
-#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <pathplanner/lib/commands/FollowPathHolonomic.h>
 #include <pathplanner/lib/path/PathPlannerPath.h>
 #include <string>
 #include <vector>
@@ -43,9 +43,8 @@ public:
 private:
     CowLib::CowTimer *m_Timer;
 
-    // pathplanner::PathPlannerTrajectory m_Trajectory;
     std::shared_ptr<pathplanner::PathPlannerPath> m_Path;
-    pathplanner::PPHolonomicDriveController *m_HolonomicController;
+    pathplanner::FollowPathHolonomic *m_PathFollower;
 
     double m_TotalTime;
     bool m_Stop;

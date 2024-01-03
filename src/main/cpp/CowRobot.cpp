@@ -17,7 +17,7 @@ CowRobot::CowRobot()
 
     m_PreviousGyroError = 0;
     // m_Gyro->Reset(); - don't know why we have this commented
-    m_Accelerometer = new frc::BuiltInAccelerometer(frc::Accelerometer::kRange_4G);
+    m_Accelerometer = new frc::BuiltInAccelerometer(frc::BuiltInAccelerometer::kRange_4G);
 
     // Set up drivetrain
     // TODO: reset constants needs to reset this

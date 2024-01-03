@@ -32,7 +32,8 @@ private:
 
     int m_DisabledCount = 0;
 
-    frc::DriverStation::Alliance m_Alliance = frc::DriverStation::Alliance::kInvalid;
+    // no more kInvaid
+    frc::DriverStation::Alliance m_Alliance = frc::DriverStation::Alliance::kRed;
 
 public:
     CowBase();

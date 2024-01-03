@@ -12,8 +12,8 @@ namespace CowLib
                                                    double maxRotationalVelocity,
                                                    double maxRotationalAccel)
     {
-        m_XPIDController     = new frc2::PIDController(driveP, driveI, driveD);
-        m_YPIDController     = new frc2::PIDController(driveP, driveI, driveD);
+        m_XPIDController     = new frc::PIDController(driveP, driveI, driveD);
+        m_YPIDController     = new frc::PIDController(driveP, driveI, driveD);
         m_ThetaPIDController = new frc::ProfiledPIDController<units::radian>(
             rotationP,
             rotationI,

@@ -14,7 +14,7 @@ AutoModes::AutoModes()
     auto pathWithEvents = [](const std::string &name,
                              const std::vector<TrajectoryEvent> &events,
                              bool resetOdometry = true,
-                             double speed       = 20.21,
+                             units::feet_per_second_t speed       = 20.21_fps,
                              double accel       = 14)
     {
         std::deque<RobotCommand *> series;
@@ -27,6 +27,8 @@ AutoModes::AutoModes()
         return new ParallelCommand({ new PathplannerSwerveTrajectoryCommand(name, speed, accel, true, resetOdometry),
                                      new SeriesCommand(series) });
     };
+
+    m_Modes["testing"].push_back(new PathplannerSwerveTrajectoryCommand("drive1-1",4_fps,5,true,true));
 
 
     m_Iterator = m_Modes.begin();

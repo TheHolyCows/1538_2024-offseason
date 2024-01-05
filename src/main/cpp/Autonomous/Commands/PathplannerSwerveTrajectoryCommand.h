@@ -5,8 +5,9 @@
 #include "./RobotCommand.h"
 
 #include <iostream>
-#include <pathplanner/lib/commands/FollowPathHolonomic.h>
 #include <pathplanner/lib/path/PathPlannerPath.h>
+#include <pathplanner/lib/path/PathPlannerTrajectory.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 #include <string>
 #include <vector>
 
@@ -23,7 +24,7 @@ public:
     };
 
     PathplannerSwerveTrajectoryCommand(const std::string &trajectoryName,
-                                       double maxSpeed,
+                                       units::feet_per_second_t maxSpeed,
                                        double maxAccel,
                                        bool stop,
                                        bool resetOdometry        = false,
@@ -44,7 +45,8 @@ private:
     CowLib::CowTimer *m_Timer;
 
     std::shared_ptr<pathplanner::PathPlannerPath> m_Path;
-    pathplanner::FollowPathHolonomic *m_PathFollower;
+    std::shared_ptr<pathplanner::PathPlannerTrajectory> m_Trajectory;
+    pathplanner::PPHolonomicDriveController *m_HolonomicController;
 
     double m_TotalTime;
     bool m_Stop;

@@ -16,9 +16,9 @@ public:
 
     void Drive(double x, double y, double rotation, bool fieldRelative);
 
-    void CubeAlign(double x);
-
-    void ConeAlign(double x, double yInput);
+    // 2023
+    // void CubeAlign(double x);
+    // void ConeAlign(double x, double yInput);
 
     void LockHeading(double x, double y, bool useRawInputs=false);
 

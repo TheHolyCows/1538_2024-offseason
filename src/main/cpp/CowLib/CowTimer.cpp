@@ -103,5 +103,5 @@ double CowTimer::GetFPGATimestamp()
 
 double CowTimer::GetMatchTime()
 {
-    return frc::DriverStation::GetMatchTime();
+    return frc::DriverStation::GetMatchTime().value();
 }

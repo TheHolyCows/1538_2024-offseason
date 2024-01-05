@@ -89,10 +89,20 @@ void SwerveDrive::SetVelocity(double vx,
     {
         // How does this know what angle it starts at
         chassisSpeeds = CowLib::CowChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, m_Gyro->GetYawDegrees());
+
+        // save off current chassis speeds for auto mode - this is always robot relative
+        m_PrevChassisSpeeds.vx = units::feet_per_second_t(vx);
+        m_PrevChassisSpeeds.vy = units::feet_per_second_t(vy);
+        m_PrevChassisSpeeds.omega = units::degrees_per_second_t(omega);
     }
     else
     {
         chassisSpeeds = CowLib::CowChassisSpeeds{ vx, vy, omega };
+
+        // save off current chassis speeds for auto mode
+        m_PrevChassisSpeeds.vx = units::feet_per_second_t(vx);
+        m_PrevChassisSpeeds.vy = units::feet_per_second_t(vy);
+        m_PrevChassisSpeeds.omega = units::degrees_per_second_t(omega);
     }
 
     std::array<CowLib::CowSwerveModuleState, 4> moduleStates;
@@ -122,7 +132,7 @@ void SwerveDrive::SetVelocity(double vx,
 }
 
 /**
- * @brief Same as the other SetVelocity, but using CowChassisSpeeds
+ * @brief Same as the other SetVelocity, but using CowChassisSpeeds used in autonomous
  * @param chassisSpeeds CowChassisSpeeds struct
  * @param isFieldRelative
  * @param centerOfRotationX X component of center of rotation

@@ -32,6 +32,8 @@ private:
 
     frc::Pose2d m_Pose{ 0_m, 0_m, 0_deg };
 
+    frc::ChassisSpeeds m_PrevChassisSpeeds{ 0.0_mps, 0.0_mps, units::radians_per_second_t(0) };
+
     CowPigeon *m_Gyro;
 
     CowLib::CowSwerveKinematics *m_Kinematics;
@@ -73,9 +75,13 @@ public:
                      double centerOfRotationY = 0,
                      bool force               = false);
 
+    void SetVelocity(frc::ChassisSpeeds);
+    
     // void SetVisionAlignVelocity(double x, double y, double rotation, bool isFieldRelative = true);
 
     frc::Pose2d GetPose() { return m_Odometry->GetWPIPose(); }
+
+    frc::ChassisSpeeds GetChassisSpeeds() { return m_PrevChassisSpeeds; }
 
     double GetPoseX();
     double GetPoseY();

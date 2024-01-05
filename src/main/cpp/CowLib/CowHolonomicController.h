@@ -20,8 +20,8 @@ namespace CowLib
     class CowHolonomicController
     {
     private:
-        frc2::PIDController *m_XPIDController;
-        frc2::PIDController *m_YPIDController;
+        frc::PIDController *m_XPIDController;
+        frc::PIDController *m_YPIDController;
 
         frc::ProfiledPIDController<units::radian> *m_ThetaPIDController;
 
